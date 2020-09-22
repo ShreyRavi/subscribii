@@ -23,12 +23,10 @@ firebase.initializeApp(firebaseConfig);
 
 const useStyles = makeStyles((theme) => ({
   fabButton: {
-    position: 'absolute',
+    position: 'fixed',
     zIndex: 99,
-    top: 150,
-    bottom: 0,
-    left: 0,
-    right: 0,
+    bottom: 80,
+    right: 20,
     margin: '0 auto',
   },
 }));
