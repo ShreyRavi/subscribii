@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, Typography, IconButton, Tooltip, Button } from '@material-ui/core';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import { StyledFirebaseAuth } from 'react-firebaseui';
+import LogoImage from '../logo512.png';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
     logoutButton: {
       color: 'white',
     },
+    logo: {
+      width: '32px',
+      height: '32px',
+      cursor: 'pointer',
+    },
 }));
 
 const Header = ({showSettingsDrawer, setShowSettingsDrawer, uiConfig, firebaseAuth, user, logout}) => {
@@ -28,7 +33,7 @@ const Header = ({showSettingsDrawer, setShowSettingsDrawer, uiConfig, firebaseAu
         <Toolbar>
           <Tooltip title="Open Settings">
             <IconButton onClick={() => setShowSettingsDrawer(!showSettingsDrawer)} edge="start" className={classes.settingsButton} color="inherit" aria-label="menu">
-              <HelpOutlineIcon />
+              <img alt="Subscribii Logo" className={classes.logo} src={LogoImage}></img>
             </IconButton>
           </Tooltip>
           <Typography variant="h6" className={classes.title}>

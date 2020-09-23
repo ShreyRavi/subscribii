@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Accordion, AccordionActions, AccordionSummary, AccordionDetails, Typography, IconButton, Tooltip } from '@material-ui/core';
+import { Container, Accordion, AccordionActions, AccordionSummary, AccordionDetails, Typography, IconButton, Tooltip, Grid } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -50,6 +50,12 @@ const SubscriptionList = ({data, deleteSubscription, timePeriod}) => {
     }
     return str.substring(0, 1).toUpperCase() + str.substring(1) + 'ly';
   };
+  const prettyDate = (date) => {
+    if (!date) {
+      return '';
+    }
+    return `${date['month']}/${date['day']}/${date['year']}`;
+  };
   const classes = useStyles();
   return (
     <Container>
@@ -67,9 +73,17 @@ const SubscriptionList = ({data, deleteSubscription, timePeriod}) => {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Cycle: {prettyTimePeriod(subscription.timePeriod)}
-            </Typography>
+            <Grid direction="column" container>
+              <Typography>
+                Payment Date: {prettyDate(subscription.date)}
+              </Typography>
+              <Typography>
+                Cycle: {prettyTimePeriod(subscription.timePeriod)} 
+              </Typography>
+              <Typography>
+                Notes: {subscription.notes}
+              </Typography>
+            </Grid>
           </AccordionDetails>
           <AccordionActions>
             <Tooltip title="Permanently Delete Subscription">

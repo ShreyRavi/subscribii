@@ -105,7 +105,7 @@ const SubscribiiApp = () => {
     db.ref('users/').child(uid).child('darkMode').set(!darkMode);
   }
 
-  const addSubscription = (name, amount, timePeriod) => {
+  const addSubscription = (name, amount, timePeriod, date, notes) => {
     if (!user) {
       alert("Error: You're not logged in!");
       return;
@@ -124,7 +124,7 @@ const SubscribiiApp = () => {
       return;
     }
     const uid = user ? user.uid : 'guest';
-    db.ref('users/').child(uid).child('subs/').push({ name: name, amount: proratedAmount, timePeriod: timePeriod });
+    db.ref('users/').child(uid).child('subs/').push({ name: name, amount: proratedAmount, timePeriod: timePeriod, date: { day: date.day(), month: date.month(), year: date.year() }, notes: notes});
   };
   const deleteSubscription = (key) => {
     const uid = user ? user.uid : 'guest';
