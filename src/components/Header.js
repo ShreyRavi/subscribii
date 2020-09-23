@@ -19,13 +19,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Header = () => {
+const Header = ({showSettingsDrawer, setShowSettingsDrawer}) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton onClick={() => setShowSettingsDrawer(!showSettingsDrawer)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <SettingsIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>

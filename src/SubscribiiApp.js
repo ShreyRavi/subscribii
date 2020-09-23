@@ -8,6 +8,7 @@ import Header from './components/Header';
 import SubscriptionList from './components/SubscriptionList';
 import Footer from './components/Footer';
 import SubscriptionAddModal from './components/SubscriptionAddModal';
+import SettingsDrawer from './components/SettingsDrawer';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGqQXoH3bKZJlPZjkgy6ejcWDcvHRVDjU",
@@ -33,16 +34,39 @@ const useStyles = makeStyles((theme) => ({
 
 const SubscribiiApp = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const [showSubscriptionAddModal, setSubscriptionAddModal] = useState(false);
+  const [showSettingsDrawer, setShowSettingsDrawer] = useState(false);
+  const [showSubscriptionAddModal, setShowSubscriptionAddModal] = useState(false);
+  //temporary
+  const [data, setData] = useState([]);
+  const addSubscription = (name, amount, timePeriod) => {
+    let proratedAmount = '';
+    if (timePeriod === 'year') {
+      proratedAmount = amount;
+    } else if (timePeriod === 'month') {
+      proratedAmount = (parseFloat(amount) * 12).toString();
+    } else if (timePeriod === 'week') {
+      proratedAmount = (parseFloat(amount) * 52).toString();
+    } else {
+      alert("Error: Incorrect Time Period Entered!");
+      return;
+    }
+    const newData = data.push({ name: name, amount: proratedAmount })
+    setData(newData);
+  }
   const classes = useStyles();
   return (
     <Container maxWidth="lg">
-      <Header />
-      <SubscriptionList />
-      <Fab onClick={() => setSubscriptionAddModal(true)} color="secondary" aria-label="add" className={classes.fabButton}>
+      <Header showSettingsDrawer={showSettingsDrawer} setShowSettingsDrawer={(m) => setShowSettingsDrawer(m)} />
+      <SubscriptionList data={data} />
+      <Fab onClick={() => setShowSubscriptionAddModal(true)} color="secondary" aria-label="add" className={classes.fabButton}>
             <AddIcon />
       </Fab>
-      <SubscriptionAddModal visible={showSubscriptionAddModal} />
+      <SettingsDrawer visible={showSettingsDrawer} />
+      <SubscriptionAddModal
+        addSubscription={addSubscription}
+        visible={showSubscriptionAddModal}
+        onClose={() => setShowSubscriptionAddModal(false)}
+      />
       <Footer darkMode={darkMode} setDarkMode={(m) => setDarkMode(m)} />
     </Container>
   );

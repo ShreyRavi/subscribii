@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
-import { Grid, AppBar, Toolbar, Typography, Button, Select, IconButton, MenuItem } from '@material-ui/core';
+import { Grid, AppBar, Toolbar, Typography, Select, IconButton, MenuItem } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 
