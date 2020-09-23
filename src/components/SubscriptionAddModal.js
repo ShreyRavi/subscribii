@@ -13,13 +13,24 @@ const useStyles = makeStyles((theme) => ({
 
 const SubscriptionAddModal = ({addSubscription, visible, onClose}) => {
   const classes = useStyles();
-  const [name, setName] = useState(null);
-  const [amount, setAmount] = useState(null);
+  const [name, setName] = useState('');
+  const [amount, setAmount] = useState('');
   const [timePeriod, setTimePeriod] = useState('month');
+  const handleNameChange = (e) => {
+    //const newName = e.target.value.replace(/[^A-Za-z0-9]/g, '');
+    setName(e.target.value);
+  };
+  const handleAmountChange = (e) => {
+    const newAmount = e.target.value.replace(/[^0-9$.]/g, '');
+    setAmount(newAmount);
+  };
   const handleAddSubscription = () => {
     addSubscription(name, amount, timePeriod);
+    setName('');
+    setAmount('');
+    setTimePeriod('month');
     onClose();
-  }
+  };
   return (
     <Dialog open={visible} onClose={onClose}>
       <DialogTitle>Add Subscription</DialogTitle>
@@ -31,7 +42,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose}) => {
             label="Name"
             fullWidth
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => handleNameChange(e)}
         />
         <InputLabel className={classes.formItem} htmlFor="amount">Amount</InputLabel>
         <OutlinedInput
@@ -40,7 +51,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose}) => {
             fullWidth
             startAdornment={<InputAdornment position="start">$</InputAdornment>}
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => handleAmountChange(e)}
         />
         <InputLabel className={classes.formItem} htmlFor="timePeriod">Cycle</InputLabel>
         <Select
@@ -52,6 +63,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose}) => {
             <MenuItem value={'month'}>Per Month</MenuItem>
             <MenuItem value={'week'}>Per Week</MenuItem>
             <MenuItem value={'year'}>Per Year</MenuItem>
+            <MenuItem value={'day'}>Per Day</MenuItem>
         </Select>
         </DialogContent>
         <DialogActions>

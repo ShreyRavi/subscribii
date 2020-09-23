@@ -1,37 +1,50 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import SettingsIcon from '@material-ui/icons/Settings';
+import { AppBar, Toolbar, Typography, IconButton, Tooltip, Button } from '@material-ui/core';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import { StyledFirebaseAuth } from 'react-firebaseui';
 
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
     },
-    menuButton: {
+    settingsButton: {
       marginRight: theme.spacing(2),
     },
     title: {
       flexGrow: 1,
     },
+    logoutButton: {
+      color: 'white',
+    },
 }));
 
-const Header = ({showSettingsDrawer, setShowSettingsDrawer}) => {
+const Header = ({showSettingsDrawer, setShowSettingsDrawer, uiConfig, firebaseAuth, user, logout}) => {
   const classes = useStyles();
+  const userName = user ? user.displayName : 'Guest';
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <IconButton onClick={() => setShowSettingsDrawer(!showSettingsDrawer)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <SettingsIcon />
-          </IconButton>
+          <Tooltip title="Open Settings">
+            <IconButton onClick={() => setShowSettingsDrawer(!showSettingsDrawer)} edge="start" className={classes.settingsButton} color="inherit" aria-label="menu">
+              <HelpOutlineIcon />
+            </IconButton>
+          </Tooltip>
           <Typography variant="h6" className={classes.title}>
-            Subscribii
+            Welcome to Subscribii, {userName}!
           </Typography>
-          <Button color="inherit">Login</Button>
+          {
+            user !== null ?
+            <Button className={classes.logoutButton} onClick={logout}>
+              Logout
+            </Button>
+            :
+            <StyledFirebaseAuth
+              uiConfig={uiConfig}
+              firebaseAuth={firebaseAuth}
+            />
+          }
         </Toolbar>
       </AppBar>
     </div>

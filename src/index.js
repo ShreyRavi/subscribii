@@ -4,9 +4,7 @@ import SubscribiiApp from './SubscribiiApp';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <SubscribiiApp />
-  </React.StrictMode>,
+  <SubscribiiApp />,
   document.getElementById('root')
 );
 
