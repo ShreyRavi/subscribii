@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubscriptionAddModal = ({addSubscription, visible, onClose}) => {
+const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => {
   const classes = useStyles();
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
@@ -67,7 +67,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose}) => {
         </Select>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddSubscription} color="primary">
+          <Button style={darkMode ? { color: 'white' } : {}} onClick={handleAddSubscription} color="primary">
             Add Subscription
           </Button>
         </DialogActions>

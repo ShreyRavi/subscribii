@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
 import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Container, Fab, Typography, Tooltip } from '@material-ui/core';
+import { Container, Fab, Typography, Tooltip, responsiveFontSizes } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Header from './components/Header';
 import SubscriptionList from './components/SubscriptionList';
@@ -39,14 +39,15 @@ const uiConfig = {
 const useStyles = makeStyles((theme) => ({
   rootDarkMode: {
     backgroundColor: '#212121',
-    width: '100vw',
-    marginLeft: '-10px',
-    height: '150vh',
+    width: '101vw',
+    marginLeft: '-9px',
+    height: '100vh',
+    color: 'white',
   },
   root: {
     width: '100vw',
     marginLeft: '-10px',
-    height: '150vh',
+    height: '100vh',
   },
   fabButton: {
     position: 'fixed',
@@ -138,7 +139,7 @@ const SubscribiiApp = () => {
   const palletType = darkMode ? "dark" : "light";
   const mainPrimaryColor = darkMode ? blueGrey[900] : indigo[500];
   const mainSecondaryColor = darkMode ? red[800] : red[500];
-  const customTheme = createMuiTheme({
+  let customTheme = createMuiTheme({
     palette: {
       type: palletType,
       primary: {
@@ -149,6 +150,7 @@ const SubscribiiApp = () => {
       }
     }
   });
+  customTheme = responsiveFontSizes(customTheme, ['xs', 'sm', 'md', 'lg', 'xl'], 8);
   return (
     <div className={darkMode ? classes.rootDarkMode : classes.root}>
       <ThemeProvider theme={customTheme}>
@@ -187,7 +189,6 @@ const SubscribiiApp = () => {
             user === null ? <></> :
             <Tooltip title="Add a Subscription">
               <Fab
-                disable={user === null}
                 onClick={() => setShowSubscriptionAddModal(true)}
                 color="secondary"
                 aria-label="add"
@@ -204,6 +205,7 @@ const SubscribiiApp = () => {
           <SubscriptionAddModal
             addSubscription={addSubscription}
             visible={showSubscriptionAddModal}
+            darkMode={darkMode}
             onClose={() => setShowSubscriptionAddModal(false)}
           />
           <Footer

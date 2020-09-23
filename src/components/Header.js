@@ -32,7 +32,7 @@ const Header = ({showSettingsDrawer, setShowSettingsDrawer, uiConfig, firebaseAu
             </IconButton>
           </Tooltip>
           <Typography variant="h6" className={classes.title}>
-            Welcome to Subscribii, {userName}!
+            Welcome to Subscribii{user === null ? "!" : `, ${userName}!`}
           </Typography>
           {
             user !== null ?
