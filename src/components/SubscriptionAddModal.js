@@ -14,16 +14,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => {
-  const classes = useStyles();
+  // useState
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [timePeriod, setTimePeriod] = useState('month');
   const [date, setDate] = useState(null);
   const [notes, setNotes] = useState('');
-  const handleNameChange = (e) => {
-    //const newName = e.target.value.replace(/[^A-Za-z0-9]/g, '');
-    setName(e.target.value);
-  };
+
+  // class functions
   const handleAmountChange = (e) => {
     const newAmount = e.target.value.replace(/[^0-9$.]/g, '');
     setAmount(newAmount);
@@ -37,6 +35,9 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => 
     setNotes('');
     onClose();
   };
+
+  // styling
+  const classes = useStyles();
   return (
     <MuiPickersUtilsProvider utils={DayjsUtils}>
       <Dialog open={visible} onClose={onClose}>
@@ -50,7 +51,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => 
               label="Name"
               fullWidth
               value={name}
-              onChange={(e) => handleNameChange(e)}
+              onChange={(e) => setName(e.target.value)}
           />
           <InputLabel className={classes.formItem} htmlFor="amount">Amount</InputLabel>
           <OutlinedInput

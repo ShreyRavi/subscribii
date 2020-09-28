@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Container, Accordion, AccordionActions, AccordionSummary, AccordionDetails, Typography, IconButton, Tooltip, Grid } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { prettyAmount, prettyDate, prettyDueDate } from '../util/util';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubscriptionList = ({ user, data, deleteSubscription, timePeriod, searchTerm }) => {
+const SubscriptionList = ({ user, data, deleteSubscription, controlTimePeriod, searchTerm }) => {
+  // useState
   const [openAccordions, setOpenAccordions] = useState([]);
   const handleAccordionChange = (key) => {
     if (openAccordions.indexOf(key) > -1) {
@@ -32,34 +34,8 @@ const SubscriptionList = ({ user, data, deleteSubscription, timePeriod, searchTe
       setOpenAccordions(openAccordions.concat([key]));
     }
   }
-  const prettyAmount = (amt) => {
-    if (timePeriod === 'year') {
-      return (parseFloat(amt)).toFixed(2).toString() + " per year";
-    } else if (timePeriod === 'month') {
-      return (Math.round((parseFloat(amt) * 100) / 12) / 100).toFixed(2).toString() + " per month";
-    } else if (timePeriod === 'week') {
-      return (Math.round((parseFloat(amt) * 100) / 52) / 100).toFixed(2).toString() + " per week";
-    } else if (timePeriod === 'day') {
-      return (Math.round((parseFloat(amt) * 100) / 365) / 100).toFixed(2).toString() + " per day";
-    }
-    alert("Error: Incorrect Time Period");
-    return "0.00"
-  };
-  const prettyTimePeriod = (str) => {
-    if (!str) {
-      return '';
-    }
-    if (str === 'day') {
-      return 'Daily';
-    }
-    return str.substring(0, 1).toUpperCase() + str.substring(1) + 'ly';
-  };
-  const prettyDate = (date) => {
-    if (!date) {
-      return '';
-    }
-    return `${date['month']}/${date['day']}/${date['year']}`;
-  };
+  
+  // styling
   const classes = useStyles();
   const userName = user ? user.displayName : 'Guest';
   return (
@@ -75,20 +51,32 @@ const SubscriptionList = ({ user, data, deleteSubscription, timePeriod, searchTe
               {subscription.name}
             </Typography>
             <Typography className={classes.secondaryHeading}>
-              ${prettyAmount(subscription.amount)}
+              {
+                controlTimePeriod === 'default' ?
+                `$${prettyAmount(subscription.amount, subscription.timePeriod, ' per ')}, due ${prettyDueDate(subscription.date, subscription.timePeriod)}`
+                :
+                `$${prettyAmount(subscription.amount, controlTimePeriod, ' per ')}`
+              }
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Grid direction="column" container>
               <Typography>
-                Payment Date: {prettyDate(subscription.date)}
+                You are paying ${prettyAmount(subscription.amount, subscription.timePeriod)}{prettyDate(subscription.date, subscription.timePeriod)} since {prettyDate(subscription.date, 'full')}.
               </Typography>
+              <br />
               <Typography>
-                Cycle: {prettyTimePeriod(subscription.timePeriod)} 
+                Next payment will be due {prettyDueDate(subscription.date, subscription.timePeriod, true)}.
               </Typography>
-              <Typography>
-                Notes: {subscription.notes}
-              </Typography>
+              {
+                subscription.notes ?
+                <Typography>
+                  <br />
+                  Notes: {subscription.notes}
+                </Typography>
+                :
+                <></>
+              }
             </Grid>
           </AccordionDetails>
           <AccordionActions>

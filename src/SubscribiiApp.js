@@ -13,6 +13,8 @@ import SettingsDrawer from './components/SettingsDrawer';
 import Controls from './components/Controls';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { red, indigo, blueGrey } from '@material-ui/core/colors';
+import { getCompareFunction } from './util/util';
+import ScreenshotImg from './screenshot.png';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGqQXoH3bKZJlPZjkgy6ejcWDcvHRVDjU",
@@ -60,18 +62,27 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     top: 100,
   },
+  screenshot: {
+    width: '60vw',
+  },
+  introPage: {
+    textAlign: 'center',
+  },
 }));
 
 const SubscribiiApp = () => {
+  // useState
   const [user, setUser] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
   const [timePeriod, setTimePeriod] = useState('month');
+  const [controlTimePeriod, setControlTimePeriod] = useState('default');
   const [sortWith, setSortWith] = useState('byDate');
   const [searchTerm, setSearchTerm] = useState('');
   const [showSettingsDrawer, setShowSettingsDrawer] = useState(false);
   const [showSubscriptionAddModal, setShowSubscriptionAddModal] = useState(false);
   const [data, setData] = useState([]);
 
+  // useEffect
   useEffect(() => {
     const handleData = snap => {
       if (snap.val()) {
@@ -86,7 +97,6 @@ const SubscribiiApp = () => {
     db.ref('users/').child(uid).child('subs/').on('value', handleData, error => alert(error));
     return () => { db.ref('users/').child(uid).child('subs/').off('value', handleData); };
   }, [user]);
-
   useEffect(() => {
     const handleDarkMode = snap => {
       if (snap.val()) {
@@ -97,17 +107,16 @@ const SubscribiiApp = () => {
     db.ref('users/').child(uid).child('darkMode').on('value', handleDarkMode, error => alert(error));
     return () => { db.ref('users/').child(uid).child('darkMode').off('value', handleDarkMode); };
   }, [user, darkMode]);
-
   useEffect(() => {
     firebase.auth().onAuthStateChanged(setUser);
   }, []);
 
+  // class functions
   const toggleDarkMode = () => {
     const uid = user ? user.uid : 'guest';
     setDarkMode(!darkMode);
     db.ref('users/').child(uid).child('darkMode').set(!darkMode);
-  }
-
+  };
   const addSubscription = (name, amount, timePeriod, date, notes) => {
     if (!user) {
       alert("Error: You're not logged in!");
@@ -131,7 +140,7 @@ const SubscribiiApp = () => {
       return;
     }
     const uid = user ? user.uid : 'guest';
-    db.ref('users/').child(uid).child('subs/').push({ name: name, amount: proratedAmount, timePeriod: timePeriod, date: { day: date.day(), month: date.month(), year: date.year() }, notes: notes});
+    db.ref('users/').child(uid).child('subs/').push({ name: name, amount: proratedAmount, timePeriod: timePeriod, date: { day: date.date(), month: (date.month() + 1), year: date.year() }, notes: notes});
   };
   const deleteSubscription = (key) => {
     if (!window.confirm('Are you sure you want to delete this subscription?')) {
@@ -148,63 +157,15 @@ const SubscribiiApp = () => {
     setDarkMode(false);
     firebase.auth().signOut();
   };
-  const getCompareFunction = (typeOfSort) => {
-    if (typeOfSort === 'byDate') {
-      return (a, b) => {
-        return new Date(parseInt(a.date.year), parseInt(a.date.month) - 1, parseInt(a.date.day)) - new Date(parseInt(b.date.year), parseInt(b.date.month) - 1, parseInt(b.date.day));
-      };
-    } else if (typeOfSort === 'byAmountDescending') {
-      return (a, b) => {
-        if (parseFloat(a.amount) > parseFloat(b.amount)) {
-          return -1;
-        } else if (parseFloat(a.amount) < parseFloat(b.amount))  {
-          return 1;
-        } 
-        return 0;
-      };
-    } else if (typeOfSort === 'byAmountAscending') {
-      return (a, b) => {
-        if (parseFloat(a.amount) < parseFloat(b.amount)) {
-          return -1;
-        } else if (parseFloat(a.amount) > parseFloat(b.amount))  {
-          return 1;
-        } 
-        return 0;
-      };
-    } else if (typeOfSort === 'byCycle') {
-      const mapTimePeriodToPriority = {
-        'day': 0,
-        'week': 1,
-        'month': 2,
-        'year': 3,
-      };
-      return (a, b) => {
-        if (mapTimePeriodToPriority[a.timePeriod] < mapTimePeriodToPriority[b.timePeriod]) {
-          return -1;
-        } else if (mapTimePeriodToPriority[a.timePeriod] > mapTimePeriodToPriority[b.timePeriod]) {
-          return 1;
-        } 
-        return 0;
-      };
-    } else if (typeOfSort === 'byAlpha') {
-      return (a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        } else if (a.name > b.name) {
-          return 1;
-        } 
-        return 0;
-      };
-    }
-    return null;
-  };
   const getFilteredData = () => {
     const tempData = [...data].sort(getCompareFunction(sortWith));
     if (searchTerm) {
-      return tempData.filter((datum) => datum['name'].toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+      return tempData.filter((datum) => (datum['name'].toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) || (datum['notes'].toLowerCase().indexOf(searchTerm.toLowerCase()) > -1));
     }
     return tempData;
   };
+
+  // styling
   const classes = useStyles();
   const palletType = darkMode ? "dark" : "light";
   const mainPrimaryColor = darkMode ? blueGrey[900] : indigo[500];
@@ -225,6 +186,8 @@ const SubscribiiApp = () => {
     }
   });
   customTheme = responsiveFontSizes(customTheme, ['xs', 'sm', 'md', 'lg', 'xl'], 8);
+
+  // render
   return (
     <div className={darkMode ? classes.rootDarkMode : classes.root}>
       <ThemeProvider theme={customTheme}>
@@ -250,25 +213,25 @@ const SubscribiiApp = () => {
                     darkMode={darkMode}
                     searchTerm={searchTerm}
                     setSearchTerm={setSearchTerm}
-                    timePeriod={timePeriod}
+                    controlTimePeriod={controlTimePeriod}
                     setSortWith={setSortWith}
-                    setTimePeriod={setTimePeriod}
+                    setControlTimePeriod={setControlTimePeriod}
                   />
                   <SubscriptionList
                     user={user}
                     searchTerm={searchTerm}
                     data={getFilteredData()}
                     deleteSubscription={(idx) => deleteSubscription(idx)}
-                    timePeriod={timePeriod} 
+                    controlTimePeriod={controlTimePeriod} 
                   />
                 </>
               :
-                <Container>
+                <Container className={classes.introPage}>
                   <Typography variant="h3">
-                    Subscriptions Under Control <br />
+                    Subscribii - Subscriptions Under Control <br />
                   </Typography>
                   <Typography variant="body1"> <br />
-                    <b>Subscribii</b> is a tool to keep track of all of your subscriptions. <br /> <br /> Just log in with your Google account and add them to your Subscribii. That's it! <br /> <br /> Get started now by signing in with Google on the toolbar above.
+                    <b>Subscribii</b> is a tool to keep track of all of your subscriptions, developed by Shreyas Tallamraju. <br /> <br /> <img className={classes.screenshot} alt="subscribii screenshot" src={ScreenshotImg}></img> <br /> <br /> Just log in with your Google account and add your subscriptions to your Subscribii. <br /> <br /> It's that simple! Get started now by signing in with Google on the toolbar above.
                   </Typography>
                 </Container>
             }

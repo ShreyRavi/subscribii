@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 import { Grid, AppBar, Toolbar, Typography, Select, IconButton, MenuItem, Tooltip } from '@material-ui/core';
+import { getAverageExpensesString } from '../util/util';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -23,26 +24,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Footer = ({ data, darkMode, toggleDarkMode, timePeriod, setTimePeriod, visible }) => {
-    const AverageExpenses = () => {
-        let averageExpensesString = '0.00';
-        const sumYearlyExpenses = data.reduce((sum, subscription) => sum + parseFloat(subscription.amount), 0);
-        if (timePeriod === 'year') {
-            averageExpensesString = (sumYearlyExpenses).toFixed(2).toString();
-        } else if (timePeriod === 'month') {
-            averageExpensesString = (Math.round((sumYearlyExpenses * 100) / 12) / 100).toFixed(2).toString();
-        } else if (timePeriod === 'week') {
-            averageExpensesString = (Math.round((sumYearlyExpenses * 100) / 52) / 100).toFixed(2).toString();
-        } else if (timePeriod === 'day') {
-            averageExpensesString = (Math.round((sumYearlyExpenses * 100) / 365) / 100).toFixed(2).toString();
-        } else {
-            alert("Error: Incorrect Time Period!");
-        }
-        return (
-        <Typography variant="h4" className={classes.resultLabel}>
-            ${averageExpensesString}
-        </Typography>
-        );
-    };
     const classes = useStyles();
     return (
         <AppBar position="fixed" className={classes.appBar}>
@@ -69,7 +50,9 @@ const Footer = ({ data, darkMode, toggleDarkMode, timePeriod, setTimePeriod, vis
                                 <MenuItem value={'day'}>Per Day</MenuItem>
                             </Select>
                         </Grid>
-                        <AverageExpenses />
+                        <Typography variant="h4" className={classes.resultLabel}>
+                            ${getAverageExpensesString(data, timePeriod)}
+                        </Typography>
                     </>
                 :
                 <Typography variant="caption">Copyright &copy; Shreyas Tallamraju 2020. All Rights Reserved.</Typography>

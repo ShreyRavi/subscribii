@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Controls = ({ darkMode, sortWith, setSortWith, timePeriod, setTimePeriod, searchTerm, setSearchTerm }) => {
+const Controls = ({ darkMode, sortWith, setSortWith, controlTimePeriod, setControlTimePeriod, searchTerm, setSearchTerm }) => {
   const classes = useStyles();
   return (
     <Container>
@@ -66,7 +66,7 @@ const Controls = ({ darkMode, sortWith, setSortWith, timePeriod, setTimePeriod, 
                     value={sortWith}
                     onChange={(e) => setSortWith(e.target.value)}
                 >
-                    <MenuItem value={'byDate'}>Sort By Date</MenuItem>
+                    <MenuItem value={'byDate'}>Sort By Due Date</MenuItem>
                     <MenuItem value={'byAmountDescending'}>Sort By Amount (Descending)</MenuItem>
                     <MenuItem value={'byAmountAscending'}>Sort By Amount (Ascending)</MenuItem>
                     <MenuItem value={'byCycle'}>Sort By Cycle</MenuItem>
@@ -75,9 +75,10 @@ const Controls = ({ darkMode, sortWith, setSortWith, timePeriod, setTimePeriod, 
                 <Select
                     className={classes.timeSelect}
                     style={darkMode ? { color: 'white' } : {}}
-                    value={timePeriod}
-                    onChange={(e) => setTimePeriod(e.target.value)}
+                    value={controlTimePeriod}
+                    onChange={(e) => setControlTimePeriod(e.target.value)}
                 >
+                    <MenuItem value={'default'}>Per Time Period</MenuItem>
                     <MenuItem value={'month'}>Per Month</MenuItem>
                     <MenuItem value={'week'}>Per Week</MenuItem>
                     <MenuItem value={'year'}>Per Year</MenuItem>
