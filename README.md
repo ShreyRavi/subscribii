@@ -29,12 +29,16 @@ npm run build
 firebase deploy
 ```
 
-## React Components
-- **SubscribiiApp**
-- **Footer** 
-- **Header** 
-- **SettingsDrawer** 
-- TBD
+## Notable Files in `src`
+- **SubscribiiApp**.js
+- `components/`**Footer**.js 
+- `components/`**Header**.js
+- `components/`**SettingsDrawer**.js
+- `components/`**Controls**.js
+- `components/`**SubscriptionAddModal**.js
+- `components/`**SubscriptionEditModal**.js
+- `components/`**SubscriptionList**.js
+- `util/`**util**.js
 
 ## Built With
 - [React](https://reactjs.org/)
@@ -43,7 +47,10 @@ firebase deploy
 - [`react-firebaseui`](https://www.npmjs.com/package/react-firebaseui)
 
 ## Privacy Policy
-- TBD
+- All data is stored on the Realtime Database on Firebase only for the use of the application's functions, and Google authentication via `react-firebaseui` is used. Data is not used for any purpose other than explicit function of the application and is not sold or analyzed in any fashion. Updated 9/28/2020.
 
 ## Future Plans
-- TBD
+- Improved UI
+- Add Data Visualization Panels on Spending
+- Track Year over Year spending
+- More QoL Improvements
