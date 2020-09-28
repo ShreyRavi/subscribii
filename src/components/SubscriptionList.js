@@ -7,31 +7,41 @@ import { prettyAmount, prettyDate, prettyDueDate } from '../util/util';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
     marginTop: '10px',
   },
   noDataMessage: {
     textAlign: 'center',
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
+    fontSize: theme.typography.pxToRem(14),
+    flexBasis: '19vw',
+    display: 'block',
     flexShrink: 0,
   },
   secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(14),
     color: theme.palette.text.secondary,
+    flexBasis: '29vw',
+    display: 'block',
+    flexShrink: 0,
+  },
+  tertiaryHeading: {
+    fontSize: theme.typography.pxToRem(10),
+    color: theme.palette.text.secondary,
+    display: 'block',
+    flexBasis: '15vw',
+    flexShrink: 0,
   },
 }));
 
 const SubscriptionList = ({ user, data, deleteSubscription, controlTimePeriod, searchTerm }) => {
   // useState
-  const [openAccordions, setOpenAccordions] = useState([]);
+  const [openAccordion, setOpenAccordion] = useState(null);
   const handleAccordionChange = (key) => {
-    if (openAccordions.indexOf(key) > -1) {
-      setOpenAccordions(openAccordions.filter(a => a !== key));
+    if (openAccordion === key) {
+      setOpenAccordion(null);
     } else {
-      setOpenAccordions(openAccordions.concat([key]));
+      setOpenAccordion(key);
     }
   }
   
@@ -43,7 +53,7 @@ const SubscriptionList = ({ user, data, deleteSubscription, controlTimePeriod, s
       {
         data.length ?
         data.map((subscription) =>
-          <Accordion key={`accordion_${subscription.key}`} expanded={(openAccordions.indexOf(subscription.key) > -1)} onChange={() => handleAccordionChange(subscription.key)}>
+          <Accordion key={`accordion_${subscription.key}`} expanded={openAccordion === subscription.key} onChange={() => handleAccordionChange(subscription.key)}>
           <AccordionSummary
             expandIcon={<Tooltip title="See More"><ExpandMoreIcon /></Tooltip>}
           >
@@ -53,9 +63,14 @@ const SubscriptionList = ({ user, data, deleteSubscription, controlTimePeriod, s
             <Typography className={classes.secondaryHeading}>
               {
                 controlTimePeriod === 'default' ?
-                `$${prettyAmount(subscription.amount, subscription.timePeriod, ' per ')}, due ${prettyDueDate(subscription.date, subscription.timePeriod)}`
+                `$${prettyAmount(subscription.amount, subscription.timePeriod, ' / ')}`
                 :
-                `$${prettyAmount(subscription.amount, controlTimePeriod, ' per ')}`
+                `$${prettyAmount(subscription.amount, controlTimePeriod, ' / ')}`
+              }
+            </Typography>
+            <Typography className={classes.tertiaryHeading}>
+              {
+                `due ${prettyDueDate(subscription.date, subscription.timePeriod)}`
               }
             </Typography>
           </AccordionSummary>

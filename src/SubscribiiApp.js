@@ -63,7 +63,9 @@ const useStyles = makeStyles((theme) => ({
     top: 100,
   },
   screenshot: {
-    width: '60vw',
+    width: '75vw',
+    margin: '0px',
+    padding: '0px',
   },
   introPage: {
     textAlign: 'center',
@@ -228,10 +230,13 @@ const SubscribiiApp = () => {
               :
                 <Container className={classes.introPage}>
                   <Typography variant="h3">
-                    Subscribii - Subscriptions Under Control <br />
+                    Subscribii <br />
+                  </Typography>
+                  <Typography variant="h5">
+                    Subscriptions Under Control <br />
                   </Typography>
                   <Typography variant="body1"> <br />
-                    <b>Subscribii</b> is a tool to keep track of all of your subscriptions, developed by Shreyas Tallamraju. <br /> <br /> <img className={classes.screenshot} alt="subscribii screenshot" src={ScreenshotImg}></img> <br /> <br /> Just log in with your Google account and add your subscriptions to your Subscribii. <br /> <br /> It's that simple! Get started now by signing in with Google on the toolbar above.
+                    <b>Subscribii</b> is a tool to keep track of all of your subscriptions. <br /> <br /> <img className={classes.screenshot} alt="subscribii screenshot" src={ScreenshotImg}></img> <br /> <br /> Get started now by signing in with Google and adding your subscriptions! <br />
                   </Typography>
                 </Container>
             }

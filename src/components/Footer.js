@@ -21,13 +21,21 @@ const useStyles = makeStyles((theme) => ({
         top: 'auto',
         bottom: 0,
     },
+    introFooter: {
+        textAlign: 'center',
+        justifyContent: 'center',
+    },
+    links: {
+        textDecoration: 'none',
+        color: 'white',
+    }
 }));
 
 const Footer = ({ data, darkMode, toggleDarkMode, timePeriod, setTimePeriod, visible }) => {
     const classes = useStyles();
     return (
         <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar className={visible ? null : classes.introFooter}>
             {
                 visible ? 
                     <>
@@ -55,7 +63,7 @@ const Footer = ({ data, darkMode, toggleDarkMode, timePeriod, setTimePeriod, vis
                         </Typography>
                     </>
                 :
-                <Typography variant="caption">Copyright &copy; Shreyas Tallamraju 2020. All Rights Reserved.</Typography>
+                <Typography variant="caption">Copyright &copy; Shreyas Tallamraju 2020. All Rights Reserved.<br /><a className={classes.links} href={'https://github.com/ShreyRavi/subscribii'}>Github</a> | <a className={classes.links} href={'mailto:shreyastallamraju@gmail.com'}>Contact</a> | <a className={classes.links} href={'https://github.com/ShreyRavi/subscribii/blob/master/PrivacyPolicy.md'}>Legal</a></Typography>
             }
             
         </Toolbar>

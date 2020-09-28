@@ -16,6 +16,7 @@ const ordinal_suffix_of = (i) => {
 const isDecember = (m) => parseInt(m) === 12 ? 1 : 0;
 const isToday = (a) => a.getFullYear() === new Date().getFullYear() && a.getMonth() === new Date().getMonth() && a.getDate() === new Date().getDate();
 const isTomorrow = (a) => Math.round((a - new Date())/(1000*60*60*24)) === 1;
+const isWithinWeek = (a) => Math.round((a - new Date())/(1000*60*60*24)) <= 6;
 export const getCompareFunction = (typeOfSort) => {
     if (typeOfSort === 'byDate') {
       return (a, b) => {
@@ -107,6 +108,9 @@ export const getDueDate = (date, tp) => {
       return '';
     }
     const origPaymentDate = new Date(parseInt(date['year']), parseInt(date['month']) - 1, parseInt(date['day']));
+    if (origPaymentDate > today) {
+      return origPaymentDate;
+    }
     if (tp === 'year') {
       if (today.getMonth() > origPaymentDate.getMonth()) {
         return new Date(parseInt(today.getFullYear() + 1), parseInt(date['month']) - 1, parseInt(date['day']));
@@ -157,6 +161,9 @@ export const prettyDueDate = (date, tp, verbose=false) => {
      return 'tomorrow';
     } 
     return `tomorrow, ${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
+  }
+  if (isWithinWeek(dueDate) && tp !== 'week') {
+    return prettyDueDate(date, 'week', verbose);
   }
    if (tp === 'year') {
     return `${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
