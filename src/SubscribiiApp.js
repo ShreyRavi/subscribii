@@ -131,6 +131,9 @@ const SubscribiiApp = () => {
   };
   const deleteSubscription = (key) => {
     const uid = user ? user.uid : 'guest';
+    if (data.length === 1) {
+      setData([]);
+    }
     db.ref('users/').child(uid).child('subs/').child(key).set(null);
   };
   const handleLogout = () => {
