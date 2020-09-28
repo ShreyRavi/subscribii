@@ -8,14 +8,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   dateSelect: {
-    minWidth: '200px',
-    maxWidth: '200px',
+    fontSize: '12px',
+    width: '15vw',
     marginRight: '10px',
-    marginLeft: '5px',
   },
   timeSelect: {
-    minWidth: '200px',
-    maxWidth: '200px',
+    fontSize: '12px',
+    width: '15vw',
   },
   search: {
     position: 'relative',
@@ -24,10 +23,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    maxWidth: '300px',
+    maxWidth: '42vw',
     [theme.breakpoints.up('sm')]: {
       marginLeft: 'auto',
-      width: '300px',
+      width: '42vw',
     },
   },
   searchIcon: {
@@ -47,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
-    width: '200px',
+    width: '42vw',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -59,7 +58,7 @@ const Controls = ({ darkMode, sortWith, setSortWith, controlTimePeriod, setContr
   return (
     <Container>
         <Paper classes={classes.root}>
-            <Grid direction="row" container>
+            <Grid justify="center" direction="row" container>
                 <Select
                     className={classes.dateSelect}
                     style={darkMode ? { color: 'white' } : {}}
