@@ -67,7 +67,8 @@ const Controls = ({ darkMode, sortWith, setSortWith, timePeriod, setTimePeriod, 
                     onChange={(e) => setSortWith(e.target.value)}
                 >
                     <MenuItem value={'byDate'}>Sort By Date</MenuItem>
-                    <MenuItem value={'byAmount'}>Sort By Amount</MenuItem>
+                    <MenuItem value={'byAmountDescending'}>Sort By Amount (Descending)</MenuItem>
+                    <MenuItem value={'byAmountAscending'}>Sort By Amount (Ascending)</MenuItem>
                     <MenuItem value={'byCycle'}>Sort By Cycle</MenuItem>
                     <MenuItem value={'byAlpha'}>Sort By Alphabetical</MenuItem>
                 </Select>

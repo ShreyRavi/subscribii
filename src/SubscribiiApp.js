@@ -153,7 +153,7 @@ const SubscribiiApp = () => {
       return (a, b) => {
         return new Date(parseInt(a.date.year), parseInt(a.date.month) - 1, parseInt(a.date.day)) - new Date(parseInt(b.date.year), parseInt(b.date.month) - 1, parseInt(b.date.day));
       };
-    } else if (typeOfSort === 'byAmount') {
+    } else if (typeOfSort === 'byAmountDescending') {
       return (a, b) => {
         if (parseFloat(a.amount) > parseFloat(b.amount)) {
           return -1;
@@ -162,11 +162,26 @@ const SubscribiiApp = () => {
         } 
         return 0;
       };
-    } else if (typeOfSort === 'byCycle') {
+    } else if (typeOfSort === 'byAmountAscending') {
       return (a, b) => {
-        if (a.timePeriod < b.timePeriod) {
+        if (parseFloat(a.amount) < parseFloat(b.amount)) {
           return -1;
-        } else if (a.timePeriod > b.timePeriod) {
+        } else if (parseFloat(a.amount) > parseFloat(b.amount))  {
+          return 1;
+        } 
+        return 0;
+      };
+    } else if (typeOfSort === 'byCycle') {
+      const mapTimePeriodToPriority = {
+        'day': 0,
+        'week': 1,
+        'month': 2,
+        'year': 3,
+      };
+      return (a, b) => {
+        if (mapTimePeriodToPriority[a.timePeriod] < mapTimePeriodToPriority[b.timePeriod]) {
+          return -1;
+        } else if (mapTimePeriodToPriority[a.timePeriod] > mapTimePeriodToPriority[b.timePeriod]) {
           return 1;
         } 
         return 0;
