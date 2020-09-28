@@ -18,7 +18,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => 
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [timePeriod, setTimePeriod] = useState('month');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
   const [notes, setNotes] = useState('');
   const handleNameChange = (e) => {
     //const newName = e.target.value.replace(/[^A-Za-z0-9]/g, '');
@@ -33,7 +33,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => 
     setName('');
     setAmount('');
     setTimePeriod('month');
-    setDate(new Date());
+    setDate(null);
     setNotes('');
     onClose();
   };
@@ -44,6 +44,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => 
           <DialogContent className={classes.form}>
           <InputLabel className={classes.formItem} htmlFor="name">Name</InputLabel>
           <OutlinedInput
+              required
               autoFocus
               id="name"
               label="Name"
@@ -53,6 +54,7 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => 
           />
           <InputLabel className={classes.formItem} htmlFor="amount">Amount</InputLabel>
           <OutlinedInput
+              required
               id="amount"
               label="Amount"
               fullWidth
@@ -61,10 +63,11 @@ const SubscriptionAddModal = ({addSubscription, visible, onClose, darkMode}) => 
               onChange={(e) => handleAmountChange(e)}
           />
           <InputLabel className={classes.formItem} htmlFor="date">Payment Date</InputLabel>
-          <DatePicker autoOk={true} className={classes.datePicker} id="date" value={date} onChange={setDate} />
+          <DatePicker required autoOk={true} className={classes.datePicker} id="date" value={date} onChange={setDate} />
           <InputLabel className={classes.formItem} htmlFor="timePeriod">Cycle</InputLabel>
           <Select
             fullWidth
+            required
             id="timePeriod"
             value={timePeriod}
             onChange={(e) => setTimePeriod(e.target.value)}

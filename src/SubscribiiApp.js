@@ -113,6 +113,10 @@ const SubscribiiApp = () => {
       alert("Error: You're not logged in!");
       return;
     }
+    if (!name || !amount || !timePeriod || !date) {
+      alert("Error: You haven't filled out all required inputs!");
+      return;
+    }
     let proratedAmount = '';
     if (timePeriod === 'year') {
       proratedAmount = amount;
@@ -130,6 +134,9 @@ const SubscribiiApp = () => {
     db.ref('users/').child(uid).child('subs/').push({ name: name, amount: proratedAmount, timePeriod: timePeriod, date: { day: date.day(), month: date.month(), year: date.year() }, notes: notes});
   };
   const deleteSubscription = (key) => {
+    if (!window.confirm('Are you sure you want to delete this subscription?')) {
+      return;
+    }
     const uid = user ? user.uid : 'guest';
     if (data.length === 1) {
       setData([]);
@@ -233,6 +240,8 @@ const SubscribiiApp = () => {
                     setTimePeriod={setTimePeriod}
                   />
                   <SubscriptionList
+                    user={user}
+                    searchTerm={searchTerm}
                     data={getFilteredData()}
                     deleteSubscription={(idx) => deleteSubscription(idx)}
                     timePeriod={timePeriod} 

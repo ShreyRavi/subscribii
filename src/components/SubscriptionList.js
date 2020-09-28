@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginTop: '10px',
   },
+  noDataMessage: {
+    textAlign: 'center',
+  },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     flexBasis: '33.33%',
@@ -20,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubscriptionList = ({ data, deleteSubscription, timePeriod }) => {
+const SubscriptionList = ({ user, data, deleteSubscription, timePeriod, searchTerm }) => {
   const [openAccordions, setOpenAccordions] = useState([]);
   const handleAccordionChange = (key) => {
     if (openAccordions.indexOf(key) > -1) {
@@ -58,9 +61,11 @@ const SubscriptionList = ({ data, deleteSubscription, timePeriod }) => {
     return `${date['month']}/${date['day']}/${date['year']}`;
   };
   const classes = useStyles();
+  const userName = user ? user.displayName : 'Guest';
   return (
     <Container className={classes.root}>
       {
+        data.length ?
         data.map((subscription) =>
           <Accordion key={`accordion_${subscription.key}`} expanded={(openAccordions.indexOf(subscription.key) > -1)} onChange={() => handleAccordionChange(subscription.key)}>
           <AccordionSummary
@@ -95,6 +100,18 @@ const SubscriptionList = ({ data, deleteSubscription, timePeriod }) => {
           </AccordionActions>
         </Accordion>
         )
+        :
+        searchTerm === '' ?
+        <Typography className={classes.noDataMessage} variant="h4">
+          <br />
+          Welcome to Subscribii, {`${userName}!`}<br /><br />
+          Get started by adding a subscription.
+        </Typography> 
+        :
+        <Typography className={classes.noDataMessage} variant="h4">
+          <br />
+          No search results found, {`${userName}!`}
+        </Typography> 
       }
     </Container>
   );
