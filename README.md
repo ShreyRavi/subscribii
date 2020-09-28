@@ -1,4 +1,4 @@
-# [Subscribii](subscribii.web.app/)
+# [Subscribii](subscribii.web.app/) ([subscribii.web.app](subscribii.web.app/))
 ### Subscriptions Under Control
 Lose track of what you spend? Subscribii is an application built with React + Firebase to keep track of your own subscriptions!
 
