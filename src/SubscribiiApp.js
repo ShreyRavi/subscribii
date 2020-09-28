@@ -10,6 +10,8 @@ import SubscriptionList from './components/SubscriptionList';
 import Footer from './components/Footer';
 import SubscriptionAddModal from './components/SubscriptionAddModal';
 import SettingsDrawer from './components/SettingsDrawer';
+import Controls from './components/Controls';
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { red, indigo, blueGrey } from '@material-ui/core/colors';
 
 const firebaseConfig = {
@@ -39,15 +41,13 @@ const uiConfig = {
 const useStyles = makeStyles((theme) => ({
   rootDarkMode: {
     backgroundColor: '#212121',
-    width: '101vw',
     marginLeft: '-9px',
-    height: '100vh',
     color: 'white',
+    height: '160vh',
   },
   root: {
-    width: '100vw',
     marginLeft: '-10px',
-    height: '100vh',
+    height: '160vh',
   },
   fabButton: {
     position: 'fixed',
@@ -66,6 +66,8 @@ const SubscribiiApp = () => {
   const [user, setUser] = useState(null);
   const [darkMode, setDarkMode] = useState(false);
   const [timePeriod, setTimePeriod] = useState('month');
+  const [sortWith, setSortWith] = useState('byDate');
+  const [searchTerm, setSearchTerm] = useState('');
   const [showSettingsDrawer, setShowSettingsDrawer] = useState(false);
   const [showSubscriptionAddModal, setShowSubscriptionAddModal] = useState(false);
   const [data, setData] = useState([]);
@@ -74,9 +76,10 @@ const SubscribiiApp = () => {
     const handleData = snap => {
       if (snap.val()) {
         const s = snap.val();
-        setData(Object.keys(s).map(key => {
+        const newData = Object.keys(s).map(key => {
           return {...s[key], ...{key: key}};
-        }));
+        });
+        setData(newData);
       }
     }
     const uid = user ? user.uid : 'guest';
@@ -135,18 +138,64 @@ const SubscribiiApp = () => {
     setDarkMode(false);
     firebase.auth().signOut();
   };
+  const getCompareFunction = (typeOfSort) => {
+    if (typeOfSort === 'byDate') {
+      return (a, b) => {
+        return new Date(parseInt(a.date.year), parseInt(a.date.month) - 1, parseInt(a.date.day)) - new Date(parseInt(b.date.year), parseInt(b.date.month) - 1, parseInt(b.date.day));
+      };
+    } else if (typeOfSort === 'byAmount') {
+      return (a, b) => {
+        if (parseFloat(a.amount) > parseFloat(b.amount)) {
+          return -1;
+        } else if (parseFloat(a.amount) < parseFloat(b.amount))  {
+          return 1;
+        } 
+        return 0;
+      };
+    } else if (typeOfSort === 'byCycle') {
+      return (a, b) => {
+        if (a.timePeriod < b.timePeriod) {
+          return -1;
+        } else if (a.timePeriod > b.timePeriod) {
+          return 1;
+        } 
+        return 0;
+      };
+    } else if (typeOfSort === 'byAlpha') {
+      return (a, b) => {
+        if (a.name < b.name) {
+          return -1;
+        } else if (a.name > b.name) {
+          return 1;
+        } 
+        return 0;
+      };
+    }
+    return null;
+  };
+  const getFilteredData = () => {
+    const tempData = [...data].sort(getCompareFunction(sortWith));
+    if (searchTerm) {
+      return tempData.filter((datum) => datum['name'].toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+    }
+    return tempData;
+  };
   const classes = useStyles();
   const palletType = darkMode ? "dark" : "light";
   const mainPrimaryColor = darkMode ? blueGrey[900] : indigo[500];
+  const backgroundColor = darkMode ? '#212121' : null;
   const mainSecondaryColor = darkMode ? red[800] : red[500];
   let customTheme = createMuiTheme({
     palette: {
       type: palletType,
+      background: {
+        default: backgroundColor,
+      },
       primary: {
-        main: mainPrimaryColor
+        main: mainPrimaryColor,
       },
       secondary: {
-        main: mainSecondaryColor
+        main: mainSecondaryColor,
       }
     }
   });
@@ -154,6 +203,7 @@ const SubscribiiApp = () => {
   return (
     <div className={darkMode ? classes.rootDarkMode : classes.root}>
       <ThemeProvider theme={customTheme}>
+        <CssBaseline />
         <Container maxWidth="lg">
           <Header
             showSettingsDrawer={showSettingsDrawer}
@@ -168,12 +218,23 @@ const SubscribiiApp = () => {
             className={classes.subscriptionList}
           >
             {
-              user !== null ? 
-                <SubscriptionList
-                  data={data}
-                  deleteSubscription={(idx) => deleteSubscription(idx)}
-                  timePeriod={timePeriod} 
-                />
+              user !== null ?
+                <>
+                  <Controls 
+                    sortWith={sortWith}
+                    darkMode={darkMode}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    timePeriod={timePeriod}
+                    setSortWith={setSortWith}
+                    setTimePeriod={setTimePeriod}
+                  />
+                  <SubscriptionList
+                    data={getFilteredData()}
+                    deleteSubscription={(idx) => deleteSubscription(idx)}
+                    timePeriod={timePeriod} 
+                  />
+                </>
               :
                 <Container>
                   <Typography variant="h3">

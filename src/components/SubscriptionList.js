@@ -7,6 +7,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    marginTop: '10px',
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubscriptionList = ({data, deleteSubscription, timePeriod}) => {
+const SubscriptionList = ({ data, deleteSubscription, timePeriod }) => {
   const [openAccordions, setOpenAccordions] = useState([]);
   const handleAccordionChange = (key) => {
     if (openAccordions.indexOf(key) > -1) {
@@ -58,7 +59,7 @@ const SubscriptionList = ({data, deleteSubscription, timePeriod}) => {
   };
   const classes = useStyles();
   return (
-    <Container>
+    <Container className={classes.root}>
       {
         data.map((subscription) =>
           <Accordion key={`accordion_${subscription.key}`} expanded={(openAccordions.indexOf(subscription.key) > -1)} onChange={() => handleAccordionChange(subscription.key)}>

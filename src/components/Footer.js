@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Footer = ({data, darkMode, toggleDarkMode, timePeriod, setTimePeriod, visible}) => {
+const Footer = ({ data, darkMode, toggleDarkMode, timePeriod, setTimePeriod, visible }) => {
     const AverageExpenses = () => {
         let averageExpensesString = '0.00';
         const sumYearlyExpenses = data.reduce((sum, subscription) => sum + parseFloat(subscription.amount), 0);
