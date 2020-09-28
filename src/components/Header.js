@@ -38,7 +38,7 @@ const Header = ({showSettingsDrawer, setShowSettingsDrawer, uiConfig, firebaseAu
           </Tooltip>
           <Typography variant="h6" className={classes.title}>
             {
-              user === null ? 'Subscribii - Subscriptions Managed' : `${userName}'s Subscribii`
+              user === null ? 'Subscribii - Subscriptions Under Control' : `${userName}'s Subscribii`
             }
           </Typography>
           {

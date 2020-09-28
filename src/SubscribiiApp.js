@@ -250,10 +250,10 @@ const SubscribiiApp = () => {
               :
                 <Container>
                   <Typography variant="h3">
-                    Subscriptions Kept Under Control <br />
+                    Subscriptions Under Control <br />
                   </Typography>
-                  <Typography variant="body2"> <br />
-                    Subscribii is a tool to keep track of all of your subscriptions. <br /> Just log in with your Google account and add your subscriptions. <br /> <br /> Yep, it's that easy! <br /> <br /> Get started now by signing in with Google on the toolbar above.
+                  <Typography variant="body1"> <br />
+                    <b>Subscribii</b> is a tool to keep track of all of your subscriptions. <br /> <br /> Just log in with your Google account and add them to your Subscribii. That's it! <br /> <br /> Get started now by signing in with Google on the toolbar above.
                   </Typography>
                 </Container>
             }
