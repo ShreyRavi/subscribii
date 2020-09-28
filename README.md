@@ -1,5 +1,5 @@
 # [Subscribii](subscribii.web.app/)
-### Subscriptions Managed
+### Subscriptions Under Control
 Lose track of what you spend? Subscribii is an application built with React + Firebase to keep track of your own subscriptions!
 
 <p align="center"><img src="https://raw.githubusercontent.com/ShreyRavi/subscribii/master/src/screenshot.png" height="93%" width="93%">Screenshots of the Subscribii App in action.</p>
