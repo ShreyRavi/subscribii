@@ -1,10 +1,10 @@
-# [Subscribii](https://subscribii.web.app/) ([subscribii.web.app](https://subscribii.web.app/))
+# [Subscribii](https://subscribii.com/) ([subscribii.com](https://subscribii.web.app/))
 ### Subscriptions Under Control
 Lose track of what you spend? Subscribii is an application built with React + Firebase to keep track of your own subscriptions!
 
 <p align="center"><img src="https://raw.githubusercontent.com/ShreyRavi/subscribii/master/src/screenshot.png" height="93%" width="93%">Screenshots of the Subscribii App in action.</p>
 
-## [Link to Live Demo](https://subscribii.web.app/)
+## [Link to Live Demo](https://subscribii.com/)
 
 ## Usage
 Go to [the deployed app](subscribii.web.app/) and log into the app via your Google account. Then, one can add and remove subscriptions and relevant information (payment date, amount, etc.).
