@@ -8,12 +8,12 @@ import AddIcon from '@material-ui/icons/Add';
 import Header from './components/Header';
 import SubscriptionList from './components/SubscriptionList';
 import Footer from './components/Footer';
-import SubscriptionAddModal from './components/SubscriptionAddModal';
+import SubscriptionEditAddModal from './components/SubscriptionEditAddModal';
 import SettingsDrawer from './components/SettingsDrawer';
 import Controls from './components/Controls';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { red, indigo, blueGrey } from '@material-ui/core/colors';
-import { getCompareFunction } from './util/util';
+import { getCompareFunction, getAdjustedAmount } from './util/util';
 import ScreenshotImg from './screenshot.png';
 
 const firebaseConfig = {
@@ -43,13 +43,11 @@ const uiConfig = {
 const useStyles = makeStyles((theme) => ({
   rootDarkMode: {
     backgroundColor: '#212121',
-    marginLeft: '-9px',
     color: 'white',
-    height: '160vh',
+    height: '100vh',
   },
   root: {
-    marginLeft: '-10px',
-    height: '160vh',
+    height: '100vh',
   },
   fabButton: {
     position: 'fixed',
@@ -63,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
     top: 100,
   },
   screenshot: {
-    width: '75vw',
+    alignSelf: 'center',
+    width: '70vw',
     margin: '0px',
     padding: '0px',
   },
@@ -75,14 +74,15 @@ const useStyles = makeStyles((theme) => ({
 const SubscribiiApp = () => {
   // useState
   const [user, setUser] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [timePeriod, setTimePeriod] = useState('month');
   const [controlTimePeriod, setControlTimePeriod] = useState('default');
   const [sortWith, setSortWith] = useState('byDate');
   const [searchTerm, setSearchTerm] = useState('');
   const [showSettingsDrawer, setShowSettingsDrawer] = useState(false);
-  const [showSubscriptionAddModal, setShowSubscriptionAddModal] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [data, setData] = useState([]);
+  const [editSubscriptionKey, setEditSubscriptionKey] = useState(null);
 
   // useEffect
   useEffect(() => {
@@ -128,24 +128,16 @@ const SubscribiiApp = () => {
       alert("Error: You haven't filled out all required inputs!");
       return;
     }
-    let proratedAmount = '';
-    if (timePeriod === 'year') {
-      proratedAmount = amount;
-    } else if (timePeriod === 'month') {
-      proratedAmount = (parseFloat(amount) * 12).toString();
-    } else if (timePeriod === 'week') {
-      proratedAmount = (parseFloat(amount) * 52).toString();
-    } else if (timePeriod === 'day') {
-      proratedAmount = (parseFloat(amount) * 365).toString();
-    } else {
+    const proratedAmount = getAdjustedAmount(amount, timePeriod, false);
+    if (proratedAmount === null) {
       alert("Error: Incorrect Time Period Entered!");
       return;
     }
     const uid = user ? user.uid : 'guest';
     db.ref('users/').child(uid).child('subs/').push({ name: name, amount: proratedAmount, timePeriod: timePeriod, date: { day: date.date(), month: (date.month() + 1), year: date.year() }, notes: notes});
   };
-  const deleteSubscription = (key) => {
-    if (!window.confirm('Are you sure you want to delete this subscription?')) {
+  const deleteSubscription = (key, confirm=true) => {
+    if (confirm && !window.confirm('Are you sure you want to delete this subscription?')) {
       return;
     }
     const uid = user ? user.uid : 'guest';
@@ -153,6 +145,31 @@ const SubscribiiApp = () => {
       setData([]);
     }
     db.ref('users/').child(uid).child('subs/').child(key).set(null);
+  };
+  const editSubscription = (key) => {
+    if(key) {
+      setEditSubscriptionKey(key);
+      setShowSubscriptionModal(!showSubscriptionModal);
+      setEditSubscriptionKey(key);
+    }
+  };
+  const editSubscriptionFromDB = (key, name, amount, timePeriod, date, notes) => {
+    if (!user) {
+      alert("Error: You're not logged in!");
+      return;
+    }
+    if (!name || !amount || !timePeriod || !date) {
+      alert("Error: You haven't filled out all required inputs!");
+      return;
+    }
+    const proratedAmount = getAdjustedAmount(amount, timePeriod, false);
+    if (proratedAmount === null) {
+      alert("Error: Incorrect Time Period Entered!");
+      return;
+    }
+    const uid = user ? user.uid : 'guest';
+    db.ref('users/').child(uid).child('subs/').child(key).set({ name: name, amount: proratedAmount, timePeriod: timePeriod, date: { day: new Date(date).getDate(), month: new Date(date).getMonth() + 1, year: new Date(date).getFullYear() }, notes: notes});
+    setEditSubscriptionKey(null);
   };
   const handleLogout = () => {
     setData([]);
@@ -204,7 +221,7 @@ const SubscribiiApp = () => {
             logout={handleLogout}
           />
           <Container
-            maxWidth="md"
+            maxWidth="lg"
             className={classes.subscriptionList}
           >
             {
@@ -223,6 +240,7 @@ const SubscribiiApp = () => {
                     user={user}
                     searchTerm={searchTerm}
                     data={getFilteredData()}
+                    editSubscription={editSubscription}
                     deleteSubscription={(idx) => deleteSubscription(idx)}
                     controlTimePeriod={controlTimePeriod} 
                   />
@@ -245,7 +263,7 @@ const SubscribiiApp = () => {
             user === null ? <></> :
             <Tooltip title="Add a Subscription">
               <Fab
-                onClick={() => setShowSubscriptionAddModal(true)}
+                onClick={() => setShowSubscriptionModal(true)}
                 color="secondary"
                 aria-label="add"
                 className={classes.fabButton}
@@ -257,12 +275,19 @@ const SubscribiiApp = () => {
           <SettingsDrawer
             visible={showSettingsDrawer}
             onClose={() => setShowSettingsDrawer(false)}
-          />
-          <SubscriptionAddModal
-            addSubscription={addSubscription}
-            visible={showSubscriptionAddModal}
             darkMode={darkMode}
-            onClose={() => setShowSubscriptionAddModal(false)}
+          />
+          <SubscriptionEditAddModal
+            addSubscription={addSubscription}
+            editSubscription={editSubscriptionFromDB}
+            subscriptionKey={editSubscriptionKey}
+            data={data}
+            visible={showSubscriptionModal}
+            darkMode={darkMode}
+            onClose={() => {
+              setEditSubscriptionKey(null);
+              setShowSubscriptionModal(false);
+            }}
           />
           <Footer
             visible={user !== null}

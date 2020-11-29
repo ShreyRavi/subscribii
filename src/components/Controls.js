@@ -5,28 +5,36 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    justifyItems: 'center',
+  },
+  selectControls: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   dateSelect: {
     fontSize: '12px',
-    width: '15vw',
-    marginRight: '10px',
+    textAlign: 'center',
+    width: '50%',
   },
   timeSelect: {
     fontSize: '12px',
-    width: '15vw',
+    textAlign: 'center',
+    width: '50%',
   },
   search: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    maxWidth: '42vw',
+    maxWidth: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: 'auto',
-      width: '42vw',
+      width: '100%',
     },
   },
   searchIcon: {
@@ -46,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
-    width: '42vw',
+    width: '100%',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -57,32 +65,34 @@ const Controls = ({ darkMode, sortWith, setSortWith, controlTimePeriod, setContr
   const classes = useStyles();
   return (
     <Container>
-        <Paper classes={classes.root}>
-            <Grid justify="center" direction="row" container>
-                <Select
-                    className={classes.dateSelect}
-                    style={darkMode ? { color: 'white' } : {}}
-                    value={sortWith}
-                    onChange={(e) => setSortWith(e.target.value)}
-                >
-                    <MenuItem value={'byDate'}>Sort By Due Date</MenuItem>
-                    <MenuItem value={'byAmountDescending'}>Sort By Amount (Descending)</MenuItem>
-                    <MenuItem value={'byAmountAscending'}>Sort By Amount (Ascending)</MenuItem>
-                    <MenuItem value={'byCycle'}>Sort By Cycle</MenuItem>
-                    <MenuItem value={'byAlpha'}>Sort By Alphabetical</MenuItem>
-                </Select>
-                <Select
-                    className={classes.timeSelect}
-                    style={darkMode ? { color: 'white' } : {}}
-                    value={controlTimePeriod}
-                    onChange={(e) => setControlTimePeriod(e.target.value)}
-                >
-                    <MenuItem value={'default'}>Per Time Period</MenuItem>
-                    <MenuItem value={'month'}>Per Month</MenuItem>
-                    <MenuItem value={'week'}>Per Week</MenuItem>
-                    <MenuItem value={'year'}>Per Year</MenuItem>
-                    <MenuItem value={'day'}>Per Day</MenuItem>
-                </Select>
+        <Paper className={classes.root}>
+            <Grid alignItems="center" direction="column">
+                <Grid alignItems="center" direction="row">
+                  <Select
+                      className={classes.dateSelect}
+                      style={darkMode ? { color: 'white' } : {}}
+                      value={sortWith}
+                      onChange={(e) => setSortWith(e.target.value)}
+                  >
+                      <MenuItem value={'byDate'}>Sort By Due Date</MenuItem>
+                      <MenuItem value={'byAmountDescending'}>Sort By Amount (Descending)</MenuItem>
+                      <MenuItem value={'byAmountAscending'}>Sort By Amount (Ascending)</MenuItem>
+                      <MenuItem value={'byCycle'}>Sort By Cycle</MenuItem>
+                      <MenuItem value={'byAlpha'}>Sort By Alphabetical</MenuItem>
+                  </Select>
+                  <Select
+                      className={classes.timeSelect}
+                      style={darkMode ? { color: 'white' } : {}}
+                      value={controlTimePeriod}
+                      onChange={(e) => setControlTimePeriod(e.target.value)}
+                  >
+                      <MenuItem value={'default'}>Per Time Period</MenuItem>
+                      <MenuItem value={'month'}>Per Month</MenuItem>
+                      <MenuItem value={'week'}>Per Week</MenuItem>
+                      <MenuItem value={'year'}>Per Year</MenuItem>
+                      <MenuItem value={'day'}>Per Day</MenuItem>
+                  </Select>
+                </Grid>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon />

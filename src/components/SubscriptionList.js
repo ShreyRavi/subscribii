@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Accordion, AccordionActions, AccordionSummary, AccordionDetails, Typography, IconButton, Tooltip, Grid } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { prettyAmount, prettyDate, prettyDueDate } from '../util/util';
+import { getAdjustedAmount, getPrettyDateString, getPrettyDueDateString } from '../util/util';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubscriptionList = ({ user, data, deleteSubscription, controlTimePeriod, searchTerm }) => {
+const SubscriptionList = ({ user, data, editSubscription, deleteSubscription, controlTimePeriod, searchTerm }) => {
   // useState
   const [openAccordion, setOpenAccordion] = useState(null);
   const handleAccordionChange = (key) => {
@@ -63,25 +64,25 @@ const SubscriptionList = ({ user, data, deleteSubscription, controlTimePeriod, s
             <Typography className={classes.secondaryHeading}>
               {
                 controlTimePeriod === 'default' ?
-                `$${prettyAmount(subscription.amount, subscription.timePeriod, ' / ')}`
+                `$${getAdjustedAmount(subscription.amount, subscription.timePeriod, true, ' / ')}`
                 :
-                `$${prettyAmount(subscription.amount, controlTimePeriod, ' / ')}`
+                `$${getAdjustedAmount(subscription.amount, controlTimePeriod, true, ' / ')}`
               }
             </Typography>
             <Typography className={classes.tertiaryHeading}>
               {
-                `due ${prettyDueDate(subscription.date, subscription.timePeriod)}`
+                `due ${getPrettyDueDateString(subscription.date, subscription.timePeriod)}`
               }
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Grid direction="column" container>
               <Typography>
-                You are paying ${prettyAmount(subscription.amount, subscription.timePeriod)}{prettyDate(subscription.date, subscription.timePeriod)} since {prettyDate(subscription.date, 'full')}.
+                You are paying ${getAdjustedAmount(subscription.amount, subscription.timePeriod)}{getPrettyDateString(subscription.date, subscription.timePeriod)} since {getPrettyDateString(subscription.date, 'full')}.
               </Typography>
               <br />
               <Typography>
-                Next payment will be due {prettyDueDate(subscription.date, subscription.timePeriod, true)}.
+                Next payment will be due {getPrettyDueDateString(subscription.date, subscription.timePeriod, true)}.
               </Typography>
               {
                 subscription.notes ?
@@ -95,6 +96,11 @@ const SubscriptionList = ({ user, data, deleteSubscription, controlTimePeriod, s
             </Grid>
           </AccordionDetails>
           <AccordionActions>
+          <Tooltip title="Edit Subscription">
+              <IconButton onClick={() => {editSubscription(subscription.key)}}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Permanently Delete Subscription">
               <IconButton onClick={() => {deleteSubscription(subscription.key)}}>
                 <DeleteForeverIcon />

@@ -1,4 +1,26 @@
-// source: https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
+//Subscribii Internal Utilities
+
+//DayJS Imports
+import dayjs from "dayjs";
+
+const daysMap = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+//Internal util.js Methods
+
+/**
+ * ordinal_suffix_of - returns the ordinal suffix of an integer i
+ * @param {Number} i - integer to return ordinal suffix of
+ * @returns {String} - the ordinal suffix in string form
+ * source: https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
+ */
 const ordinal_suffix_of = (i) => {
     var j = i % 10,
         k = i % 100;
@@ -13,18 +35,29 @@ const ordinal_suffix_of = (i) => {
     }
     return i + "th";
 };
-const isDecember = (m) => parseInt(m) === 12 ? 1 : 0;
+
 const isToday = (a) => a.getFullYear() === new Date().getFullYear() && a.getMonth() === new Date().getMonth() && a.getDate() === new Date().getDate();
 const isTomorrow = (a) => Math.round((a - new Date())/(1000*60*60*24)) === 1;
 const isWithinWeek = (a) => Math.round((a - new Date())/(1000*60*60*24)) <= 6;
+
+//External util.js Methods
+
+/**
+ * getCompareFunction - a method that returns a comparison function for sort()
+ * @param {String} typeOfSort - a string that denotes which comparison to return
+ * @returns {Function} - a lambda function that can be used for sorting
+ */
 export const getCompareFunction = (typeOfSort) => {
+    //Date Sorting
     if (typeOfSort === 'byDate') {
       return (a, b) => {
         const aDueDate = getDueDate(a.date, a.timePeriod);
         const bDueDate = getDueDate(b.date, b.timePeriod);
         return Math.abs(Date.now() - aDueDate) - Math.abs(Date.now() - bDueDate);
       };
-    } else if (typeOfSort === 'byAmountDescending') {
+    } 
+    //Amount Descending Sorting
+    else if (typeOfSort === 'byAmountDescending') {
       return (a, b) => {
         if (parseFloat(a.amount) > parseFloat(b.amount)) {
           return -1;
@@ -33,7 +66,9 @@ export const getCompareFunction = (typeOfSort) => {
         } 
         return 0;
       };
-    } else if (typeOfSort === 'byAmountAscending') {
+    }
+    //Amount Ascending Sorting
+    else if (typeOfSort === 'byAmountAscending') {
       return (a, b) => {
         if (parseFloat(a.amount) < parseFloat(b.amount)) {
           return -1;
@@ -42,7 +77,9 @@ export const getCompareFunction = (typeOfSort) => {
         } 
         return 0;
       };
-    } else if (typeOfSort === 'byCycle') {
+    }
+    //Cycle Sorting
+    else if (typeOfSort === 'byCycle') {
       const mapTimePeriodToPriority = {
         'day': 0,
         'week': 1,
@@ -57,7 +94,9 @@ export const getCompareFunction = (typeOfSort) => {
         } 
         return 0;
       };
-    } else if (typeOfSort === 'byAlpha') {
+    } 
+    //Alphabetical Sorting
+    else if (typeOfSort === 'byAlpha') {
       return (a, b) => {
         if (a.name < b.name) {
           return -1;
@@ -67,89 +106,81 @@ export const getCompareFunction = (typeOfSort) => {
         return 0;
       };
     }
+    //Failure Case
     return null;
 };
 
+/**
+ * getAverageExpensesString - a method that returns a string of average expenses based on the subscription data and time period to average on
+ * @param {Array.Object} data - an array of subscription objects
+ * @param {String} timePeriod - a string to denote time period to average 
+ * @returns {String} - returns a string that is a prettified amount of the sum 
+ * of all subscriptions amounts
+ */
 export const getAverageExpensesString = (data, timePeriod) => {
-    let averageExpensesString = '0.00';
     const sumYearlyExpenses = data.reduce((sum, subscription) => sum + parseFloat(subscription.amount), 0);
-    if (timePeriod === 'year') {
-        averageExpensesString = (sumYearlyExpenses).toFixed(2).toString();
-    } else if (timePeriod === 'month') {
-        averageExpensesString = (Math.round((sumYearlyExpenses * 100) / 12) / 100).toFixed(2).toString();
-    } else if (timePeriod === 'week') {
-        averageExpensesString = (Math.round((sumYearlyExpenses * 100) / 52) / 100).toFixed(2).toString();
-    } else if (timePeriod === 'day') {
-        averageExpensesString = (Math.round((sumYearlyExpenses * 100) / 365) / 100).toFixed(2).toString();
-    } else {
-        alert("Error: Incorrect Time Period!");
-    }
-    return averageExpensesString.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return getAdjustedAmount(sumYearlyExpenses, timePeriod);
 };
 
-export const prettyAmount = (amt, tp, m='') => {
-    const msg = m ? m + tp : '';
-    if (tp === 'year') {
-      return (parseFloat(amt)).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
-    } else if (tp === 'month') {
-      return (Math.round((parseFloat(amt) * 100) / 12) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
-    } else if (tp === 'week') {
-      return (Math.round((parseFloat(amt) * 100) / 52) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
-    } else if (tp === 'day') {
-      return (Math.round((parseFloat(amt) * 100) / 365) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
+/**
+ * getAdjustedAmount - a method that returns a string adjust with the time period
+ * @param {Number} amount - amount to adjust
+ * @param {String} timePeriod - time period to adjust to
+ * @param {Boolean} adjust - whether to divide (true) or multiply by time factor
+ * @param {String} message - optional message to add to the end of a pretty amount
+ * @returns {String} - prettified amount adjusted
+ */
+export const getAdjustedAmount = (amount, timePeriod, adjust=true, message='') => {
+    const msg = message ? message + timePeriod : '';
+    const timePeriodDivisorMap = {
+      'year': 1,
+      'month': 12,
+      'week': 52,
+      'day': 364.25,
+    };
+    if (!(timePeriod in timePeriodDivisorMap)) {
+      alert("Error: Incorrect Time Period!");
+      return '0.00';
     }
-    alert("Error: Incorrect Time Period");
-    return "0.00"
+    if (adjust) {
+      return (Math.round((parseFloat(amount) * 100) / timePeriodDivisorMap[timePeriod]) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
+    }
+    //else, unadjust
+    return (Math.round((parseFloat(amount) * 100) * timePeriodDivisorMap[timePeriod]) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
 };
 
-export const getDueDate = (date, tp) => {
+/**
+ * getDueDate - a method that returns the next date iterated by a given time period
+ * @param {Object} date - the date to change in an Object format ({date, month, year})
+ * @param {String} timePeriod - a string (year, month, week, day) to iterate on
+ * @returns {Date} - the next due date
+ */
+export const getDueDate = (date, timePeriod) => {
     const today = new Date();
     if (!date) {
-      return '';
+      return null;
     }
     const origPaymentDate = new Date(parseInt(date['year']), parseInt(date['month']) - 1, parseInt(date['day']));
     if (origPaymentDate > today) {
       return origPaymentDate;
     }
-    if (tp === 'year') {
-      if (today.getMonth() > origPaymentDate.getMonth()) {
-        return new Date(parseInt(today.getFullYear() + 1), parseInt(date['month']) - 1, parseInt(date['day']));
-      } else if (today.getMonth() === origPaymentDate.getMonth()) {
-        if (today.getDate() > origPaymentDate.getDate()) {
-            return new Date(parseInt(today.getFullYear() + 1), parseInt(date['month']) - 1, parseInt(date['day']));
-        } else {
-            return new Date(parseInt(today.getFullYear()), parseInt(date['month']) - 1, parseInt(date['day']));
-        }
-      } else {
-        return new Date(parseInt(today.getFullYear()), parseInt(date['month']) - 1, parseInt(date['day']));
-      }
-    } else if (tp === 'month') {
-      if (today.getDate() > origPaymentDate.getDate()) {
-        return new Date(parseInt(today.getFullYear() + isDecember(date['month'])), parseInt(date['month']), parseInt(date['day']));
-      } else {
-        return new Date(parseInt(today.getFullYear()), parseInt(date['month']) - 1, parseInt(date['day']));
-      }
-    } else if (tp === 'week') {
-      const dueDay = new Date(parseInt(date['year']), parseInt(date['month']) - 1, parseInt(date['day'])).getDay();
-      if (today.getDay() > dueDay) {
-        today.setDate(today.getDate() + (7 - (today.getDay() - dueDay)));
-        return today;
-      } else {
-        today.setDate(today.getDate() + (dueDay - today.getDay()));
-        return today;
-      }
-    } else if (tp === 'day') {
-      today.setDate(today.getDate() + 1);
-      return today;
+    let result = dayjs(origPaymentDate).add(1, timePeriod);
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    while (yesterday > result) {
+      result = dayjs(result).add(1, timePeriod);
     }
-    return today;
+    return result;
 };
 
-export const prettyDueDate = (date, tp, verbose=false) => {
+export const getPrettyDueDateString = (date, timePeriod, verbose=false, adjustTimePeriod=null) => {
     if (!date) {
-      return '';
+      return null;
     }
-   const dueDate = getDueDate(date, tp);
+    let dueDate = new Date(getDueDate(date, timePeriod));
+    if (adjustTimePeriod !== null) {
+      timePeriod = adjustTimePeriod;
+    }
    if (isToday(dueDate)) {
      if (!verbose) {
       return 'today';
@@ -162,53 +193,43 @@ export const prettyDueDate = (date, tp, verbose=false) => {
     } 
     return `tomorrow, ${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
   }
-  if (isWithinWeek(dueDate) && tp !== 'week') {
-    return prettyDueDate(date, 'week', verbose);
+  if (isWithinWeek(dueDate) && timePeriod !== 'week') {
+    return getPrettyDueDateString(date, timePeriod, verbose, 'week');
   }
-   if (tp === 'year') {
+   if (timePeriod === 'year') {
     return `${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
-   } else if (tp === 'month') {
+   } else if (timePeriod === 'month') {
      if (!verbose) {
       return `${dueDate.getMonth() + 1}/${dueDate.getDate()}`;
      }
      return `${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
-   } else if (tp === 'week') {
-    const daysMap = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ];
+   } else if (timePeriod === 'week') {
     if (!verbose) {
       return `${daysMap[dueDate.getDay()]}`;
     }
     return `${daysMap[dueDate.getDay()]}, ${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
-   } else if (tp === 'day') {
+   } else if (timePeriod === 'day') {
     if (!verbose) {
       return 'tomorrow';
     }
     return `tomorrow, ${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
    }
-   return '';
+   return null;
 };
 
-export const prettyDate = (date, tp) => {
+export const getPrettyDateString = (date, timePeriod) => {
     if (!date) {
       return '';
     }
-    if (tp === 'year') {
+    if (timePeriod === 'year') {
       return ` annually on ${date['month']}/${date['day']}`;
-    } else if (tp === 'month') {
+    } else if (timePeriod === 'month') {
       return ` on the ${ordinal_suffix_of(parseInt(date['day']))} of every month`;
-    } else if (tp === 'week') {
-      const daysMap = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    } else if (timePeriod === 'week') {
       return ` every ${daysMap[new Date(parseInt(date['year']), parseInt(date['month']) - 1, parseInt(date['day'])).getDay()]}`;
-    } else if (tp === 'day') {
+    } else if (timePeriod === 'day') {
       return ' every day';
-    } else if (tp === 'full') {
+    } else if (timePeriod === 'full') {
       return `${date['month']}/${date['day']}/${date['year']}`
     }
     return '';
