@@ -44,14 +44,15 @@ const useStyles = makeStyles((theme) => ({
   rootDarkMode: {
     backgroundColor: '#212121',
     color: 'white',
-    height: '100vh',
+    height: props => props.height,
+
   },
   root: {
-    height: '100vh',
+    height: props => props.height,
   },
   fabButton: {
     position: 'fixed',
-    zIndex: 99,
+    zIndex: 9999999999,
     bottom: 80,
     right: 20,
     margin: '0 auto',
@@ -185,7 +186,9 @@ const SubscribiiApp = () => {
   };
 
   // styling
-  const classes = useStyles();
+  const classes = useStyles({
+    height: (100 + ((data.length - 3) * 12)).toString() + 'vh',
+  });
   const palletType = darkMode ? "dark" : "light";
   const mainPrimaryColor = darkMode ? blueGrey[900] : indigo[500];
   const backgroundColor = darkMode ? '#212121' : null;
@@ -260,7 +263,7 @@ const SubscribiiApp = () => {
             }
           </Container>
           {
-            user === null ? <></> :
+            user === null || showSubscriptionModal ? <></> :
             <Tooltip title="Add a Subscription">
               <Fab
                 onClick={() => setShowSubscriptionModal(true)}

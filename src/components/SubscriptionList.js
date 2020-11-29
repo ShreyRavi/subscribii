@@ -15,15 +15,20 @@ const useStyles = makeStyles((theme) => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(14),
-    flexBasis: '19vw',
+    flexBasis: '15vw',
     display: 'block',
+    overflowWrap: 'anywhere',
     flexShrink: 0,
+    marginRight: '5px',
   },
   secondaryHeading: {
-    fontSize: theme.typography.pxToRem(14),
+    fontSize: theme.typography.pxToRem(12),
     color: theme.palette.text.secondary,
-    flexBasis: '29vw',
+    flexBasis: '20vw',
+    overflow: 'auto',
+    overflowWrap: 'anywhere',
     display: 'block',
+    marginRight: '5px',
     flexShrink: 0,
   },
   tertiaryHeading: {
@@ -31,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     display: 'block',
     flexBasis: '15vw',
+    overflow: 'auto',
+    overflowWrap: 'anywhere',
+    marginRight: '5px',
     flexShrink: 0,
   },
 }));
