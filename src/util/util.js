@@ -146,7 +146,7 @@ export const getAdjustedAmount = (amount, timePeriod, adjust=true, message='') =
       return (Math.round((parseFloat(amount) * 100) / timePeriodDivisorMap[timePeriod]) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
     }
     //else, unadjust
-    return (Math.round((parseFloat(amount) * 100) * timePeriodDivisorMap[timePeriod]) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + msg;
+    return (Math.round((parseFloat(amount) * 100) * timePeriodDivisorMap[timePeriod]) / 100).toFixed(2).toString() + msg;
 };
 
 /**

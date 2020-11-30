@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   dateSelect: {
     fontSize: '12px',
     textAlign: 'center',
-    width: '50%',
+    width: '100%',
   },
   timeSelect: {
     fontSize: '12px',
@@ -80,6 +80,7 @@ const Controls = ({ darkMode, sortWith, setSortWith, controlTimePeriod, setContr
                       <MenuItem value={'byCycle'}>Sort By Cycle</MenuItem>
                       <MenuItem value={'byAlpha'}>Sort By Alphabetical</MenuItem>
                   </Select>
+                  { /*
                   <Select
                       className={classes.timeSelect}
                       style={darkMode ? { color: 'white' } : {}}
@@ -92,6 +93,7 @@ const Controls = ({ darkMode, sortWith, setSortWith, controlTimePeriod, setContr
                       <MenuItem value={'year'}>Per Year</MenuItem>
                       <MenuItem value={'day'}>Per Day</MenuItem>
                   </Select>
+                  */}
                 </Grid>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>

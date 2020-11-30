@@ -46,7 +46,7 @@ const Footer = ({ data, darkMode, toggleDarkMode, timePeriod, setTimePeriod, vis
                         </Tooltip>
                         <Grid direction="column" container>
                             <Typography variant="h6" className={classes.avgExpensesLabel}>
-                            Average Expenses
+                            Total Expenses
                             </Typography>
                             <Select
                             style={{ color: 'white' }}

@@ -50,7 +50,7 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
 
   // class functions
   const handleAmountChange = (e) => {
-    const newAmount = e.target.value.replace(/[^0-9$.]/g, '');
+    const newAmount = e.target.value.replace(/[^0-9.]/g, '');
     setAmount(newAmount);
   };
 
