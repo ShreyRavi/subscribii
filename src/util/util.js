@@ -37,8 +37,25 @@ const ordinal_suffix_of = (i) => {
 };
 
 const isToday = (a) => a.getFullYear() === new Date().getFullYear() && a.getMonth() === new Date().getMonth() && a.getDate() === new Date().getDate();
-const isTomorrow = (a) => Math.round((a - new Date())/(1000*60*60*24)) === 1;
-const isWithinWeek = (a) => Math.round((a - new Date())/(1000*60*60*24)) <= 6;
+const isWithinDays = (a, days, exact=true) => {
+  const today = new Date();
+  const later = new Date(today);
+  later.setDate(today.getDate() + days);
+  if (!exact){
+    if (a.getFullYear() === later.getFullYear() 
+    && a.getMonth() === later.getMonth() 
+    && a.getDate() <= later.getDate()) {
+        return true;
+    }
+    return false;
+  }
+  if (a.getFullYear() === later.getFullYear() 
+      && a.getMonth() === later.getMonth() 
+      && a.getDate() === later.getDate()) {
+      return true;
+  }
+  return false;
+};
 
 //External util.js Methods
 
@@ -53,7 +70,12 @@ export const getCompareFunction = (typeOfSort) => {
       return (a, b) => {
         const aDueDate = getDueDate(a.date, a.timePeriod);
         const bDueDate = getDueDate(b.date, b.timePeriod);
-        return Math.abs(Date.now() - aDueDate) - Math.abs(Date.now() - bDueDate);
+        if (aDueDate < bDueDate) {
+          return -1;
+        } else if (bDueDate < aDueDate) {
+          return 1;
+        }
+        return 0;
       };
     } 
     //Amount Descending Sorting
@@ -161,7 +183,7 @@ export const getDueDate = (date, timePeriod) => {
       return null;
     }
     const origPaymentDate = new Date(parseInt(date['year']), parseInt(date['month']) - 1, parseInt(date['day']));
-    if (origPaymentDate > today) {
+    if (origPaymentDate >= today) {
       return origPaymentDate;
     }
     let result = dayjs(origPaymentDate).add(1, timePeriod);
@@ -187,18 +209,18 @@ export const getPrettyDueDateString = (date, timePeriod, verbose=false, adjustTi
      } 
      return `today, ${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
    }
-   if (isTomorrow(dueDate)) {
+   if (isWithinDays(dueDate, 1)) {
     if (!verbose) {
      return 'tomorrow';
     } 
     return `tomorrow, ${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
   }
-  if (isWithinWeek(dueDate) && timePeriod !== 'week') {
+  if (isWithinDays(dueDate, 6 - new Date().getDay(), false) && timePeriod !== 'week') {
     return getPrettyDueDateString(date, timePeriod, verbose, 'week');
   }
    if (timePeriod === 'year') {
     return `${dueDate.getMonth() + 1}/${dueDate.getDate()}/${dueDate.getFullYear()}`;
-   } else if (timePeriod === 'month') {
+   } else if (timePeriod === 'month' || (timePeriod === 'week' && !isWithinDays(dueDate, 6 - new Date().getDay(), false))) {
      if (!verbose) {
       return `${dueDate.getMonth() + 1}/${dueDate.getDate()}`;
      }

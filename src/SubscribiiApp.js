@@ -187,7 +187,7 @@ const SubscribiiApp = () => {
 
   // styling
   const classes = useStyles({
-    height: (100 + ((data.length - 3) * 12)).toString() + 'vh',
+    height: (100 + ((data.length) * 15)).toString() + 'vh',
   });
   const palletType = darkMode ? "dark" : "light";
   const mainPrimaryColor = darkMode ? blueGrey[900] : indigo[500];

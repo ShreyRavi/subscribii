@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { red, indigo } from '@material-ui/core/colors';
 import DayjsUtils from '@date-io/dayjs';
 import { Fab, Dialog, DialogActions, DialogContent, DialogTitle, Button, Select, MenuItem, InputLabel, InputAdornment, OutlinedInput, TextField } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   fabButton: {
     position: 'relative',
     zIndex: 99,
-    top: 10,
+    top: 20,
     left: 125,
     margin: '0 auto',
   },
@@ -33,6 +34,7 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
   const [timePeriod, setTimePeriod] = useState('month');
   const [date, setDate] = useState(null);
   const [notes, setNotes] = useState('');
+  const [showCalendar, setShowCalendar] = useState(false);
 
   //useEffect
   useEffect(() => {
@@ -71,6 +73,22 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
     }
     resetFields();
   };
+
+
+  const normalTheme = createMuiTheme({
+    palette: {
+      type: "light",
+      background: {
+        default: null,
+      },
+      primary: {
+        main: indigo[500],
+      },
+      secondary: {
+        main: red[500],
+      }
+    }
+  });
 
   // styling
   const classes = useStyles();
@@ -111,13 +129,21 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
               onChange={(e) => handleAmountChange(e)}
           />
           <InputLabel className={classes.formItem} htmlFor="date">Payment Date</InputLabel>
-          <DatePicker 
-            required autoOk={true}
-            className={classes.datePicker}
-            id="date"
-            value={date}
-            onChange={setDate}
-          />
+          <ThemeProvider theme={showCalendar ? normalTheme : null}>
+            <DatePicker
+              required autoOk={true}
+              className={classes.datePicker}
+              id="date"
+              value={date}
+              onOpen={() => {
+                setShowCalendar(true);
+              }}
+              onClose={() => {
+                setShowCalendar(false);
+              }}
+              onChange={setDate}
+            />
+          </ThemeProvider>
           <InputLabel className={classes.formItem} htmlFor="timePeriod">Cycle</InputLabel>
           <Select
             fullWidth

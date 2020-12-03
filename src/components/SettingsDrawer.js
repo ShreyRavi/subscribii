@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
     width: '32px',
     height: '32px',
     cursor: 'pointer',
+    marginRight: '60vw',
   },
   fabButton: {
     position: 'fixed',
     zIndex: 99,
     top: 10,
     right: 10,
-    margin: '0 auto',
   },
   accordion: {
     marginTop: '20px',
@@ -43,6 +43,14 @@ const SettingsDrawer = ({visible, darkMode, onClose}) => {
         <Typography variant="h4">
           Subscribii &nbsp;
           <img alt="Subscribii Logo" className={classes.logo} src={LogoImage}></img>
+          <Fab
+            size="small"
+            onClick={() => onClose()}
+            color="primary"
+            aria-label="add"
+          >
+            <CloseIcon />
+          </Fab>
         </Typography>
         <Typography variant="body1">
           Subscriptions Under Control
@@ -112,14 +120,6 @@ const SettingsDrawer = ({visible, darkMode, onClose}) => {
       <Divider />
       <Typography variant="caption">Copyright &copy; Shreyas Tallamraju 2020. All Rights Reserved.<br /><a className={darkMode ? classes.linksDarkMode : classes.links} href={'https://github.com/ShreyRavi/subscribii'}>Github</a> | <a className={darkMode ? classes.linksDarkMode : classes.links} href={'mailto:shreyastallamraju@gmail.com'}>Contact</a> | <a className={darkMode ? classes.linksDarkMode : classes.links} href={'https://github.com/ShreyRavi/subscribii/blob/master/PrivacyPolicy.md'}>Legal</a></Typography>  
       </Grid>
-      <Fab
-        size="small"
-        onClick={() => onClose()}
-        color="primary"
-        aria-label="add"
-      >
-        <CloseIcon />
-      </Fab>
     </Drawer>
   );
 }
