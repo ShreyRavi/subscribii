@@ -7,7 +7,7 @@ import 'firebase/database';
 import 'firebase/auth';
 import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import {
-  Container, Fab, Typography, Tooltip, responsiveFontSizes 
+  Container, Fab, Typography, Tooltip, responsiveFontSizes,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -96,7 +96,7 @@ const SubscribiiApp = () => {
       if (snap.val()) {
         const s = snap.val();
         const newData = Object.keys(s).map((key) => {
-          return {...s[key], ...{key}};
+          return { ...s[key], ...{ key } };
         });
         setData(newData);
       }
@@ -140,7 +140,16 @@ const SubscribiiApp = () => {
       return;
     }
     const uid = user ? user.uid : 'guest';
-    db.ref('users/').child(uid).child('subs/').push({ name, amount: proratedAmount, newTimePeriod, date: { day: date.date(), month: (date.month() + 1), year: date.year() }, notes,
+    db.ref('users/').child(uid).child('subs/').push({
+      name,
+      amount: proratedAmount,
+      newTimePeriod,
+      date: {
+        day: date.date(),
+        month: (date.month() + 1),
+        year: date.year(),
+      },
+      notes,
     });
   };
   const deleteSubscription = (key, confirm = true) => {
@@ -151,7 +160,8 @@ const SubscribiiApp = () => {
     if (data.length === 1) {
       setData([]);
     }
-    db.ref('users/').child(uid).child('subs/').child(key).set(null);
+    db.ref('users/').child(uid).child('subs/').child(key)
+      .set(null);
   };
   const editSubscription = (key) => {
     if (key) {
@@ -183,7 +193,8 @@ const SubscribiiApp = () => {
         date: {
           day: new Date(date).getDate(),
           month: new Date(date).getMonth() + 1,
-          year: new Date(date).getFullYear() },
+          year: new Date(date).getFullYear(),
+        },
         notes,
       });
     setEditSubscriptionKey(null);
@@ -294,7 +305,7 @@ const SubscribiiApp = () => {
             }
           </Container>
           {
-            user === null || showSubscriptionModal ? <></> 
+            user === null || showSubscriptionModal ? <></>
               : (
                 <Tooltip title="Add a Subscription">
                   <Fab
