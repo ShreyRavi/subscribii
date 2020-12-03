@@ -1,13 +1,18 @@
+/* eslint react/jsx-filename-extension: 0 */
+/* eslint react/prop-types: 0 */
 import React, { useEffect, useState } from 'react';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { red, indigo } from '@material-ui/core/colors';
 import DayjsUtils from '@date-io/dayjs';
-import { Fab, Dialog, DialogActions, DialogContent, DialogTitle, Button, Select, MenuItem, InputLabel, InputAdornment, OutlinedInput, TextField } from '@material-ui/core';
+import {
+  Fab, Dialog, DialogActions, DialogContent, DialogTitle, Button, Select,
+  MenuItem, InputLabel, InputAdornment, OutlinedInput, TextField,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { getAdjustedAmount } from '../util/util';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   form: {
     padding: '20px',
     paddingLeft: '50px',
@@ -25,7 +30,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addSubscription, visible, onClose, darkMode}) => {
+const SubscriptionEditAddModal = ({
+  editSubscription,
+  subscriptionKey,
+  data,
+  addSubscription,
+  visible,
+  onClose,
+  darkMode,
+}) => {
   const searchData = data.filter((subscription) => subscription.key === subscriptionKey);
   const subscriptionToEdit = searchData.length ? searchData[0] : null;
   // useState
@@ -36,14 +49,16 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
   const [notes, setNotes] = useState('');
   const [showCalendar, setShowCalendar] = useState(false);
 
-  //useEffect
+  // useEffect
   useEffect(() => {
     const updateStates = () => {
       if (subscriptionKey && subscriptionToEdit) {
         setName(subscriptionToEdit.name);
         setAmount(getAdjustedAmount(subscriptionToEdit.amount, subscriptionToEdit.timePeriod));
         setTimePeriod(subscriptionToEdit.timePeriod);
-        setDate(new Date(subscriptionToEdit.date.year, parseInt(subscriptionToEdit.date.month) - 1, subscriptionToEdit.date.day), 0, 0, 0, 0);
+        setDate(new Date(subscriptionToEdit.date.year,
+          Number(subscriptionToEdit.date.month) - 1,
+          subscriptionToEdit.date.day), 0, 0, 0, 0);
         setNotes(subscriptionToEdit.notes);
       }
     };
@@ -74,10 +89,9 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
     resetFields();
   };
 
-
   const normalTheme = createMuiTheme({
     palette: {
-      type: "light",
+      type: 'light',
       background: {
         default: null,
       },
@@ -86,15 +100,15 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
       },
       secondary: {
         main: red[500],
-      }
-    }
+      },
+    },
   });
 
   // styling
   const classes = useStyles();
   return (
     <MuiPickersUtilsProvider utils={DayjsUtils}>
-      <Dialog open={visible} onClose={() => { resetFields(); onClose();}}>
+      <Dialog open={visible} onClose={() => { resetFields(); onClose(); }}>
         <Fab
           size="small"
           onClick={() => onClose()}
@@ -107,31 +121,32 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
         <DialogTitle>
           {subscriptionKey ? 'Edit Subscription' : 'Add Subscription'}
         </DialogTitle>
-          <DialogContent className={classes.form}>
+        <DialogContent className={classes.form}>
           <InputLabel className={classes.formItem} htmlFor="name">Name</InputLabel>
           <OutlinedInput
-              required
-              autoFocus
-              id="name"
-              label="Name"
-              fullWidth
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+            required
+            autoFocus
+            id="name"
+            label="Name"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <InputLabel className={classes.formItem} htmlFor="amount">Amount</InputLabel>
           <OutlinedInput
-              required
-              id="amount"
-              label="Amount"
-              fullWidth
-              startAdornment={<InputAdornment position="start">$</InputAdornment>}
-              value={amount}
-              onChange={(e) => handleAmountChange(e)}
+            required
+            id="amount"
+            label="Amount"
+            fullWidth
+            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+            value={amount}
+            onChange={(e) => handleAmountChange(e)}
           />
           <InputLabel className={classes.formItem} htmlFor="date">Payment Date</InputLabel>
           <ThemeProvider theme={showCalendar ? normalTheme : null}>
             <DatePicker
-              required autoOk={true}
+              required
+              autoOk
               className={classes.datePicker}
               id="date"
               value={date}
@@ -152,10 +167,10 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
             value={timePeriod}
             onChange={(e) => setTimePeriod(e.target.value)}
           >
-              <MenuItem value={'month'}>Per Month</MenuItem>
-              <MenuItem value={'week'}>Per Week</MenuItem>
-              <MenuItem value={'year'}>Per Year</MenuItem>
-              <MenuItem value={'day'}>Per Day</MenuItem>
+            <MenuItem value="month">Per Month</MenuItem>
+            <MenuItem value="week">Per Week</MenuItem>
+            <MenuItem value="year">Per Year</MenuItem>
+            <MenuItem value="day">Per Day</MenuItem>
           </Select>
           <InputLabel className={classes.formItem} htmlFor="timePeriod">Notes</InputLabel>
           <TextField
@@ -163,19 +178,19 @@ const SubscriptionEditAddModal = ({editSubscription, subscriptionKey, data, addS
             multiline
             rows={2}
             value={notes}
-            placeholder='Insert Notes Here...'
+            placeholder="Insert Notes Here..."
             onChange={(e) => setNotes(e.target.value)}
             variant="outlined"
           />
-          </DialogContent>
-          <DialogActions>
-            <Button style={darkMode ? { color: 'white' } : {}} onClick={handleEditAddSubscription} color="primary">
-              {subscriptionKey ? 'Edit Subscription' : 'Add Subscription'} 
-            </Button>
-          </DialogActions>
+        </DialogContent>
+        <DialogActions>
+          <Button style={darkMode ? { color: 'white' } : {}} onClick={handleEditAddSubscription} color="primary">
+            {subscriptionKey ? 'Edit Subscription' : 'Add Subscription'}
+          </Button>
+        </DialogActions>
       </Dialog>
     </MuiPickersUtilsProvider>
   );
-}
+};
 
 export default SubscriptionEditAddModal;

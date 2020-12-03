@@ -1,6 +1,10 @@
+/* eslint react/jsx-filename-extension: 0 */
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import { Container, Paper, Select, MenuItem, InputBase, Grid } from '@material-ui/core';
+import {
+  Container, Paper, Select, MenuItem, InputBase, Grid,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
@@ -61,26 +65,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Controls = ({ darkMode, sortWith, setSortWith, controlTimePeriod, setControlTimePeriod, searchTerm, setSearchTerm }) => {
+const Controls = ({
+  darkMode,
+  sortWith,
+  setSortWith,
+  // controlTimePeriod,
+  // setControlTimePeriod,
+  searchTerm,
+  setSearchTerm,
+}) => {
   const classes = useStyles();
   return (
     <Container>
-        <Paper className={classes.root}>
-            <Grid alignItems="center" direction="column">
-                <Grid alignItems="center" direction="row">
-                  <Select
-                      className={classes.dateSelect}
-                      style={darkMode ? { color: 'white' } : {}}
-                      value={sortWith}
-                      onChange={(e) => setSortWith(e.target.value)}
-                  >
-                      <MenuItem value={'byDate'}>Sort By Due Date</MenuItem>
-                      <MenuItem value={'byAmountDescending'}>Sort By Amount (Descending)</MenuItem>
-                      <MenuItem value={'byAmountAscending'}>Sort By Amount (Ascending)</MenuItem>
-                      <MenuItem value={'byCycle'}>Sort By Cycle</MenuItem>
-                      <MenuItem value={'byAlpha'}>Sort By Alphabetical</MenuItem>
-                  </Select>
-                  { /*
+      <Paper className={classes.root}>
+        <Grid alignItems="center" direction="column">
+          <Grid alignItems="center" direction="row">
+            <Select
+              className={classes.dateSelect}
+              style={darkMode ? { color: 'white' } : {}}
+              value={sortWith}
+              onChange={(e) => setSortWith(e.target.value)}
+            >
+              <MenuItem value="byDate">Sort By Due Date</MenuItem>
+              <MenuItem value="byAmountDescending">Sort By Amount (Descending)</MenuItem>
+              <MenuItem value="byAmountAscending">Sort By Amount (Ascending)</MenuItem>
+              <MenuItem value="byCycle">Sort By Cycle</MenuItem>
+              <MenuItem value="byAlpha">Sort By Alphabetical</MenuItem>
+            </Select>
+            { /*
                   <Select
                       className={classes.timeSelect}
                       style={darkMode ? { color: 'white' } : {}}
@@ -94,26 +106,26 @@ const Controls = ({ darkMode, sortWith, setSortWith, controlTimePeriod, setContr
                       <MenuItem value={'day'}>Per Day</MenuItem>
                   </Select>
                   */}
-                </Grid>
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <SearchIcon />
-                    </div>
-                    <InputBase
-                        placeholder="Search…"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                        }}
-                        inputProps={{ 'aria-label': 'search' }}
-                    />
-                </div>
-             </Grid>
-        </Paper>
+          </Grid>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search…"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </div>
+        </Grid>
+      </Paper>
     </Container>
   );
-}
+};
 
 export default Controls;
