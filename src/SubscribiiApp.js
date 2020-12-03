@@ -102,7 +102,7 @@ const SubscribiiApp = () => {
       }
     };
     const uid = user ? user.uid : 'guest';
-    db.ref('users/').child(uid).child('subs/').on('value', handleData, (error) => alert(error));
+    db.ref('users/').child(uid).child('subs/').on('value', handleData, (error) => console.info(`You are not logged in! ${error}`));
     return () => { db.ref('users/').child(uid).child('subs/').off('value', handleData); };
   }, [user]);
   useEffect(() => {
@@ -112,7 +112,7 @@ const SubscribiiApp = () => {
       }
     };
     const uid = user ? user.uid : 'guest';
-    db.ref('users/').child(uid).child('darkMode').on('value', handleDarkMode, (error) => alert(error));
+    db.ref('users/').child(uid).child('darkMode').on('value', handleDarkMode, (error) => console.info(`You are not logged in! ${error}`));
     return () => { db.ref('users/').child(uid).child('darkMode').off('value', handleDarkMode); };
   }, [user, darkMode]);
   useEffect(() => {
