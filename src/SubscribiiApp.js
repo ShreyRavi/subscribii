@@ -143,7 +143,7 @@ const SubscribiiApp = () => {
     db.ref('users/').child(uid).child('subs/').push({
       name,
       amount: proratedAmount,
-      newTimePeriod,
+      timePeriod: newTimePeriod,
       date: {
         day: date.date(),
         month: (date.month() + 1),
