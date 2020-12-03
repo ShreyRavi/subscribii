@@ -1,4 +1,4 @@
-# [Subscribii](https://subscribii.com/) ([subscribii.com](https://subscribii.web.app/))
+# [Subscribii](https://subscribii.com/) ([subscribii.com](https://subscribii.com/))
 ### Subscriptions Under Control
 Lose track of what you spend? Subscribii is an application built with React + Firebase to keep track of your own subscriptions!
 
@@ -7,7 +7,7 @@ Lose track of what you spend? Subscribii is an application built with React + Fi
 ## [Link to Live Demo](https://subscribii.com/)
 
 ## Usage
-Go to [the deployed app](subscribii.web.app/) and log into the app via your Google account. Then, one can add and remove subscriptions and relevant information (payment date, amount, etc.).
+Go to [the deployed app](subscribii.com/) and log into the app via your Google account. Then, one can add and remove subscriptions and relevant information (payment date, amount, etc.).
 
 ## Local Setup
 1. Clone Repository
@@ -35,8 +35,7 @@ firebase deploy
 - `components/`**Header**.js
 - `components/`**SettingsDrawer**.js
 - `components/`**Controls**.js
-- `components/`**SubscriptionAddModal**.js
-- `components/`**SubscriptionEditModal**.js
+- `components/`**SubscriptionEditAddModal**.js
 - `components/`**SubscriptionList**.js
 - `util/`**util**.js
 
@@ -47,10 +46,9 @@ firebase deploy
 - [`react-firebaseui`](https://www.npmjs.com/package/react-firebaseui)
 
 ## Privacy Policy
-- All data is stored on the Realtime Database on Firebase only for the use of the application's functions, and Google authentication via `react-firebaseui` is used. Data is not used for any purpose other than explicit function of the application and is not sold or analyzed in any fashion. Updated 9/28/2020.
+- All data is stored on the Realtime Database on Firebase only for the use of the application's functions, and Google authentication via `react-firebaseui` is used. Data is not used for any purpose other than explicit function of the application. Updated 9/28/2020.
 
 ## Future Plans
-- Improved UI
 - Add Data Visualization Panels on Spending
 - Track Year over Year spending
 - More QoL Improvements
