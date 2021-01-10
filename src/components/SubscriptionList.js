@@ -15,6 +15,7 @@ import { getAdjustedAmount, getPrettyDateString, getPrettyDueDateString } from '
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: '10px',
+    height: '2000px',
   },
   noDataMessage: {
     textAlign: 'center',
@@ -72,96 +73,96 @@ const SubscriptionList = ({
   const userName = user ? user.displayName : 'Guest';
   return (
     <Container className={classes.root}>
-      {
-        data.length
-          ? data.map((subscription) => (
-            <Accordion key={`accordion_${subscription.key}`} expanded={openAccordion === subscription.key} onChange={() => handleAccordionChange(subscription.key)}>
-              <AccordionSummary
-                expandIcon={<Tooltip title="See More"><ExpandMoreIcon /></Tooltip>}
-              >
-                <Typography className={classes.heading}>
-                  {subscription.name}
-                </Typography>
-                <Typography className={classes.secondaryHeading}>
-                  {
-                controlTimePeriod === 'default'
-                  ? `$${getAdjustedAmount(subscription.amount, subscription.timePeriod, true, ' / ')}`
-                  : `$${getAdjustedAmount(subscription.amount, controlTimePeriod, true, ' / ')}`
-              }
-                </Typography>
-                <Typography className={classes.tertiaryHeading}>
-                  {
-                `due ${getPrettyDueDateString(subscription.date, subscription.timePeriod)}`
-              }
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid direction="column" container>
-                  <Typography>
-                    You are paying $
-                    {getAdjustedAmount(subscription.amount, subscription.timePeriod)}
-                    {getPrettyDateString(subscription.date, subscription.timePeriod)}
-                    {' '}
-                    since
-                    {getPrettyDateString(subscription.date, 'full')}
-                    .
+        {
+          data.length
+            ? data.map((subscription) => (
+              <Accordion key={`accordion_${subscription.key}`} expanded={openAccordion === subscription.key} onChange={() => handleAccordionChange(subscription.key)}>
+                <AccordionSummary
+                  expandIcon={<Tooltip title="See More"><ExpandMoreIcon /></Tooltip>}
+                >
+                  <Typography className={classes.heading}>
+                    {subscription.name}
                   </Typography>
-                  <br />
-                  <Typography>
-                    Next payment will be due
-                    {' '}
-                    {getPrettyDueDateString(subscription.date, subscription.timePeriod, true)}
-                    .
+                  <Typography className={classes.secondaryHeading}>
+                    {
+                  controlTimePeriod === 'default'
+                    ? `$${getAdjustedAmount(subscription.amount, subscription.timePeriod, true, ' / ')}`
+                    : `$${getAdjustedAmount(subscription.amount, controlTimePeriod, true, ' / ')}`
+                }
                   </Typography>
-                  {
-                subscription.notes
-                  ? (
+                  <Typography className={classes.tertiaryHeading}>
+                    {
+                  `due ${getPrettyDueDateString(subscription.date, subscription.timePeriod)}`
+                }
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid direction="column" container>
                     <Typography>
-                      <br />
-                      Notes:
+                      You are paying $
+                      {getAdjustedAmount(subscription.amount, subscription.timePeriod)}
+                      {getPrettyDateString(subscription.date, subscription.timePeriod)}
                       {' '}
-                      {subscription.notes}
+                      since
+                      {getPrettyDateString(subscription.date, 'full')}
+                      .
                     </Typography>
-                  )
-                  : <></>
-              }
-                </Grid>
-              </AccordionDetails>
-              <AccordionActions>
-                <Tooltip title="Edit Subscription">
-                  <IconButton onClick={() => { editSubscription(subscription.key); }}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Permanently Delete Subscription">
-                  <IconButton onClick={() => { deleteSubscription(subscription.key); }}>
-                    <DeleteForeverIcon />
-                  </IconButton>
-                </Tooltip>
-              </AccordionActions>
-            </Accordion>
-          ))
-          : searchTerm === ''
-            ? (
-              <Typography className={classes.noDataMessage} variant="h4">
-                <br />
-                Welcome to Subscribii,
-                {' '}
-                {`${userName}!`}
-                <br />
-                <br />
-                Get started by adding a subscription.
-              </Typography>
-            )
-            : (
-              <Typography className={classes.noDataMessage} variant="h4">
-                <br />
-                No search results found,
-                {' '}
-                {`${userName}!`}
-              </Typography>
-            )
-}
+                    <br />
+                    <Typography>
+                      Next payment will be due
+                      {' '}
+                      {getPrettyDueDateString(subscription.date, subscription.timePeriod, true)}
+                      .
+                    </Typography>
+                    {
+                  subscription.notes
+                    ? (
+                      <Typography>
+                        <br />
+                        Notes:
+                        {' '}
+                        {subscription.notes}
+                      </Typography>
+                    )
+                    : <></>
+                }
+                  </Grid>
+                </AccordionDetails>
+                <AccordionActions>
+                  <Tooltip title="Edit Subscription">
+                    <IconButton onClick={() => { editSubscription(subscription.key); }}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Permanently Delete Subscription">
+                    <IconButton onClick={() => { deleteSubscription(subscription.key); }}>
+                      <DeleteForeverIcon />
+                    </IconButton>
+                  </Tooltip>
+                </AccordionActions>
+              </Accordion>
+            ))
+            : searchTerm === ''
+              ? (
+                <Typography className={classes.noDataMessage} variant="h4">
+                  <br />
+                  Welcome to Subscribii,
+                  {' '}
+                  {`${userName}!`}
+                  <br />
+                  <br />
+                  Get started by adding a subscription.
+                </Typography>
+              )
+              : (
+                <Typography className={classes.noDataMessage} variant="h4">
+                  <br />
+                  No search results found,
+                  {' '}
+                  {`${userName}!`}
+                </Typography>
+              )
+        }
     </Container>
   );
 };

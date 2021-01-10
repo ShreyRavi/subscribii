@@ -19,6 +19,8 @@ import SubscriptionEditAddModal from './components/SubscriptionEditAddModal';
 import SettingsDrawer from './components/SettingsDrawer';
 import Controls from './components/Controls';
 import { getCompareFunction, getAdjustedAmount } from './util/util';
+import Odometer from 'react-odometerjs'
+import 'odometer/themes/odometer-theme-minimal.css';
 import ScreenshotImg from './screenshot.png';
 
 const firebaseConfig = {
@@ -79,6 +81,7 @@ const useStyles = makeStyles(() => ({
 
 const SubscribiiApp = () => {
   // useState
+  const [moneySaved, setMoneySaved] = useState(0);
   const [user, setUser] = useState(null);
   const [darkMode, setDarkMode] = useState(true);
   const [timePeriod, setTimePeriod] = useState('month');
@@ -101,6 +104,7 @@ const SubscribiiApp = () => {
         setData(newData);
       }
     };
+    setMoneySaved(250000);
     const uid = user ? user.uid : 'guest';
     db.ref('users/').child(uid).child('subs/').on('value', handleData, (error) => console.info(`You are not logged in! ${error}`));
     return () => { db.ref('users/').child(uid).child('subs/').off('value', handleData); };
@@ -215,9 +219,7 @@ const SubscribiiApp = () => {
   };
 
   // styling
-  const classes = useStyles({
-    height: `${(100 + ((data.length) * 15)).toString()}}vh`,
-  });
+  const classes = useStyles();
   const palletType = darkMode ? 'dark' : 'light';
   const mainPrimaryColor = darkMode ? blueGrey[900] : indigo[500];
   const backgroundColor = darkMode ? '#212121' : null;
@@ -281,17 +283,24 @@ const SubscribiiApp = () => {
                 : (
                   <Container className={classes.introPage}>
                     <Typography variant="h3">
-                      Subscribii
+                      Keep track of it all
                       <br />
-                    </Typography>
-                    <Typography variant="h5">
-                      Subscriptions Under Control
+                      with Subscribii
                       <br />
                     </Typography>
                     <Typography variant="body1">
                       <br />
                       <b>Subscribii</b>
-                      is a tool to keep track of all of your subscriptions.
+                      &nbsp;is a tool to keep track of all of your subscriptions.
+                      <br />
+                      <br />
+                      <Typography variant="h5">
+                        $<Odometer 
+                        value={moneySaved}
+                        format=",ddd"
+                        duration={20000}
+                        />+ Total Subscription Costs Kept Track Of
+                      </Typography>
                       <br />
                       <br />
                       <img className={classes.screenshot} alt="subscribii screenshot" src={ScreenshotImg} />
