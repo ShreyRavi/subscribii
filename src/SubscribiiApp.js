@@ -311,7 +311,7 @@ const SubscribiiApp = () => {
                       </Typography>
                       <br />
                       <br />
-                      <img className={classes.screenshot} alt="subscribii screenshot" src={ScreenshotImg} />
+                      <img className={classes.screenshot} alt="subscribii screenshot" src={ScreenshotImg}></img>
                       <br />
                       <br />
                       Get started now by signing in with Google and adding your subscriptions!

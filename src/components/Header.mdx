@@ -1,0 +1,25 @@
+---
+name: Header
+route: /components/Header
+---
+
+import { Playground, Props } from 'docz'
+import Header from './Header'
+
+# Header
+<Props of={Header} />
+
+## Component Description
+
+## Usage
+<Playground>
+    {/* See top of browser screen to see header app bar */}
+    <Header 
+      showSettingsDrawer={true}
+      setShowSettingsDrawer={()=>{}}
+      uiConfig={null}
+      firebaseAuth={null}
+      user={null}
+      logout={()=>{}}
+    />
+</Playground>
