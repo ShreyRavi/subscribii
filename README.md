@@ -4,7 +4,7 @@ Lose track of what you spend? Subscribii is an application built with React + Fi
 
 <p align="center"><img src="https://raw.githubusercontent.com/ShreyRavi/subscribii/master/src/screenshot.png" height="93%" width="93%">Screenshots of the Subscribii App in action.</p>
 
-## [Link to Live Demo](https://subscribii.com/)
+## [Link to Live Deploy](https://subscribii.com/)
 
 ## Usage
 Go to [the deployed app](subscribii.com/) and log into the app via your Google account. Then, one can add and remove subscriptions and relevant information (payment date, amount, etc.).
