@@ -205,7 +205,6 @@ const SubscribiiApp = () => {
   };
   const handleLogout = () => {
     setData([]);
-    setDarkMode(false);
     firebase.auth().signOut();
   };
   const getFilteredData = () => {
