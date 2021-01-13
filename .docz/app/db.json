@@ -37,67 +37,6 @@
       }
     },
     {
-      "key": "README.md",
-      "value": {
-        "id": "04c6e90faac2675aa89e2176d2eec7d8",
-        "filepath": "README.md",
-        "fullpath": "/home/st/Code/subscribii/README.md",
-        "link": "",
-        "hidden": false,
-        "slug": "readme",
-        "route": "/readme",
-        "name": "Readme",
-        "menu": "",
-        "headings": [
-          {
-            "slug": "subscribii-subscribiicom",
-            "depth": 1,
-            "value": "Subscribii  ( subscribii.com )"
-          },
-          {
-            "slug": "subscriptions-under-control",
-            "depth": 3,
-            "value": "Subscriptions Under Control"
-          },
-          {
-            "slug": "link-to-live-deploy",
-            "depth": 2,
-            "value": "Link to Live Deploy"
-          },
-          {
-            "slug": "usage",
-            "depth": 2,
-            "value": "Usage"
-          },
-          {
-            "slug": "local-setup",
-            "depth": 2,
-            "value": "Local Setup"
-          },
-          {
-            "slug": "notable-files-in-src",
-            "depth": 2,
-            "value": "Notable Files in  src"
-          },
-          {
-            "slug": "built-with",
-            "depth": 2,
-            "value": "Built With"
-          },
-          {
-            "slug": "privacy-policy",
-            "depth": 2,
-            "value": "Privacy Policy"
-          },
-          {
-            "slug": "future-plans",
-            "depth": 2,
-            "value": "Future Plans"
-          }
-        ]
-      }
-    },
-    {
       "key": "src/SubscribiiApp.mdx",
       "value": {
         "name": "SubscribiiApp",
