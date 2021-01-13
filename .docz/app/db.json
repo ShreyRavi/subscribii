@@ -159,6 +159,52 @@
       }
     },
     {
+      "key": "src/components/Controls.mdx",
+      "value": {
+        "name": "Controls",
+        "route": "/components/Controls",
+        "id": "67b7a281c08651107c704d48f5b3000f",
+        "filepath": "src/components/Controls.mdx",
+        "fullpath": "/home/st/Code/subscribii/src/components/Controls.mdx",
+        "link": "",
+        "hidden": false,
+        "slug": "src-components-controls",
+        "menu": "",
+        "headings": [
+          {
+            "slug": "controls",
+            "depth": 1,
+            "value": "Controls"
+          },
+          {
+            "slug": "component-description",
+            "depth": 2,
+            "value": "Component Description"
+          },
+          {
+            "slug": "import",
+            "depth": 2,
+            "value": "Import"
+          },
+          {
+            "slug": "props",
+            "depth": 2,
+            "value": "Props"
+          },
+          {
+            "slug": "usage",
+            "depth": 2,
+            "value": "Usage"
+          },
+          {
+            "slug": "demo",
+            "depth": 2,
+            "value": "Demo"
+          }
+        ]
+      }
+    },
+    {
       "key": "src/components/Header.mdx",
       "value": {
         "name": "Header",

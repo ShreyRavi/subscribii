@@ -1,0 +1,132 @@
+---
+name: Controls
+route: /components/Controls
+---
+
+import { Playground, Props } from 'docz'
+import Controls from './Controls'
+import SubscriptionList from './SubscriptionList'
+import { getCompareFunction, getAdjustedAmount } from '../util/util'
+
+# Controls
+_A sorting and search bar for use to parse a list_
+<Props of={Controls} />
+
+## Component Description
+`Controls` is a React component that allows parsing of a list via a text search and a sort selector.
+
+## Import
+```
+import Controls from './Controls';
+```
+
+## Props
+| Name            | Type           | Default              | Description          |
+| --------------- |:--------------:| --------------------:| -------------------- |
+| `darkMode`      | `true | false` |  `true`              |  Enable dark mode?   |
+| `sortWith`      | `String`       |  `'byDate'`          |  Sorting method      |
+| `setSortWith`   | `Function`     |  `useState` Function |  Sorting method edit |
+| `searchTerm`    | `String`       |  `''`                |  Search term str     |
+| `setSearchTerm` | `Function`     |  `useState` Function |  Search term edit    |
+
+## Usage
+```
+<Controls 
+  darkMode={Boolean}
+  sortWith={String}
+  setSortWith={Function}
+  searchTerm={String}
+  setSearchTerm={Function}
+/>
+```
+
+## Demo
+<Playground>
+  {/*See demo above*/}
+  {/*Code example below is working React for a use case of Controls*/}
+  {() => {
+    const [data, setData] = React.useState([
+      {
+        key: 'one',
+        name: 'Netflicks',
+        amount: '14.99',
+        timePeriod: 'month',
+        date: {
+          day: 23,
+          month: 2,
+          year: 2020,
+        },
+        notes: 'these are some notes',
+      },
+      {
+        key: 'two',
+        name: 'Wholoo',
+        amount: '24.99',
+        timePeriod: 'week',
+        date: {
+          day: 12,
+          month: 5,
+          year: 2019,
+        },
+        notes: 'these are some notes also about wholoo',
+      },
+      {
+        key: 'three',
+        name: 'Rent',
+        amount: '750.00',
+        timePeriod: 'month',
+        date: {
+          day: 1,
+          month: 7,
+          year: 2018,
+        },
+        notes: 'these are some notes also about rent',
+      },
+      {
+        key: 'three',
+        name: 'Rent',
+        amount: '750.00',
+        timePeriod: 'month',
+        date: {
+          day: 1,
+          month: 7,
+          year: 2018,
+        },
+        notes: 'these are some notes also about rent',
+      },
+    ]);
+    const [user, setUser] = React.useState(null);
+    const [darkMode, setDarkMode] = React.useState(true);
+    const [sortWith, setSortWith] = React.useState('byDate');
+    const [searchTerm, setSearchTerm] = React.useState('');
+    const [controlTimePeriod, setControlTimePeriod] = React.useState('default');
+    const getFilteredData = () => {
+      const tempData = [...data].sort(getCompareFunction(sortWith));
+      if (searchTerm) {
+        return tempData.filter((datum) => (
+          datum.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1)
+          || (datum.notes.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1));
+      }
+      return tempData;
+    };
+    return (
+      <>
+        <Controls 
+          darkMode={darkMode}
+          sortWith={sortWith}
+          setSortWith={setSortWith}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+        <SubscriptionList
+          user={user}
+          searchTerm={searchTerm}
+          data={getFilteredData()}
+          editSubscription={() => {}}
+          deleteSubscription={() => {}}
+          controlTimePeriod={controlTimePeriod}
+        />
+      </>
+    );
+  }}  
+</Playground>
