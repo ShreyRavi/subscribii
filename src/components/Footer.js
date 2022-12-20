@@ -74,7 +74,7 @@ const Footer = ({
                   )
                   : (
                     <Typography variant="caption">
-                      Copyright &copy; Shreyas Tallamraju 2020. All Rights Reserved.
+                      Copyright &copy; Shreyas Tallamraju { (new Date().getFullYear()) }. All Rights Reserved.
                       <br />
                       <a className={classes.links} href="https://github.com/ShreyRavi/subscribii">Github</a>
                       {' '}

@@ -37,7 +37,7 @@ const Header = ({
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <Tooltip title="Open Settings">
+          <Tooltip title="See FAQs">
             <IconButton onClick={() => setShowSettingsDrawer(!showSettingsDrawer)} edge="start" className={classes.settingsButton} color="inherit" aria-label="menu">
               <img alt="Subscribii Logo" className={classes.logo} src={LogoImage} />
             </IconButton>

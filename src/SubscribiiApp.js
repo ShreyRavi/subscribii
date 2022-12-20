@@ -104,7 +104,7 @@ const SubscribiiApp = () => {
         setData(newData);
       }
     };
-    setMoneySaved(250000);
+    setMoneySaved(12650000);
     const uid = user ? user.uid : 'guest';
     db.ref('users/').child(uid).child('subs/').on('value', handleData, 
     (error) => {

@@ -104,6 +104,7 @@ const SubscriptionList = ({
                       {getPrettyDateString(subscription.date, subscription.timePeriod)}
                       {' '}
                       since
+                      {' '}
                       {getPrettyDateString(subscription.date, 'full')}
                       .
                     </Typography>
